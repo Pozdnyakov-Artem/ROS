@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR01",
+  "commit": "cfba604653d9bd4e5c900fff890d58e6311edd42",
+  "course_kit": {
+    "version": "v1-w02",
+    "archive_sha256": "5d210c431e32418f45e2cffa9dd2028116c7a9520a36f3c7079c778cd73437a8"
+  },
+  "commands": [
+    "export ROS_DOMAIN_ID=16",
+    "ros2 doctor --report",
+    "ros2 run turtlesim turtlesim_node",
+    "ros2 run turtlesim turtle_teleop_key",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 topic list -t",
+    "ros2 node info /turtlesim",
+    "ros2 topic type /turtle1/pose",
+    "ros2 topic echo /turtle1/pose --once",
+    "ros2 topic hz /turtle1/pose",
+    "timeout 5s ros2 topic echo /turtle1/pose \"$POSE_TYPE\" --once",
+    "printf 'exit=%s\n' \"$?\""
+  ],
+  "tests": [
+    {
+      "name": "Обнаружение нод и топиков исправного графа",
+      "status": "passed"
+    },
+    {
+      "name": "Измерение частоты /turtle1/pose",
+      "status": "passed"
+    },
+    {
+      "name": "Изоляция нод разными ROS_DOMAIN_ID",
+      "status": "passed"
+    },
+    {
+      "name": "Восстановление получения позы в исходном домене",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "При работе turtlesim в домене 16 запустить teleop и наблюдатель в домене 17; timeout 5s завершился с exit=124, поза не поступила",
+    "root_cause": "Ноды с разными ROS_DOMAIN_ID находятся в разных областях обнаружения и не обмениваются сообщениями",
+    "proof_after": "После повторного запуска teleop и наблюдателя в домене 16 обе ноды обнаружены, сообщение /turtle1/pose получено, exit=0"
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 2
+  },
+  "ai_used": false
+}

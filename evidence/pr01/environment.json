@@ -1,0 +1,10 @@
+{
+    "launch method": "docker",
+    "OS": "Ubuntu 24.04.4 LTS",
+    "ROS name": "jazzy",
+    "ROS type": "ros2",
+    "Gazebo": "8.11.0",
+    "RMW": "rmw_fastrtps_cpp",
+    "Experience domains": "16 и 17",
+    "docker digest": "sha256:ef6e0a6e5ac8fecfad07c5fd5067bac2c7938a6d00d54fd1cea50e877a52976f" 
+}
