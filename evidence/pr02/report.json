@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR02",
+  "commit": "54f2bd5594ba13d2987a087d938f4f066c601858",
+  "course_kit": {
+    "version": "v1-w02",
+    "archive_sha256": "5d210c431e32418f45e2cffa9dd2028116c7a9520a36f3c7079c778cd73437a8"
+  },
+  "commands": [
+    "export ROS_DOMAIN_ID=16",
+    "ls -a",
+    "pwd",
+    "mkdir -p src evidence/pr02",
+    "colcon build --symlink-install --packages-select turtle_bringup",
+    "source install/setup.bash",
+    "ros2 pkg prefix turtle_bringup",
+    "ros2 launch turtle_bringup sim.launch.py",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 interface show geometry_msgs/msg/Twist",
+    "ros2 topic type /turtle1/pose",
+    "ros2 topic echo /turtle1/pose --once",
+    "ros2 topic pub --once /turtle1/cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
+    "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
+    "ros2 topic info /cmd_vel --verbose",
+    "ros2 topic info /turtle1/cmd_vel --verbose",
+    "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /turtle1/cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'"
+  ],
+  "tests": [
+    {
+      "name": "Сборка пустого пакета turtle_bringup",
+      "status": "passed"
+    },
+    {
+      "name": "Итоговая сборка turtle_bringup с launch-файлом",
+      "status": "passed"
+    },
+    {
+      "name": "Запуск turtlesim через sim.launch.py",
+      "status": "passed"
+    },
+    {
+      "name": "Доставка одиночной команды в /turtle1/cmd_vel и изменение позы",
+      "status": "passed"
+    },
+    {
+      "name": "Воспроизведение отсутствия подписчика в ошибочном топике /cmd_vel",
+      "status": "passed"
+    },
+    {
+      "name": "Восстановление доставки после исправления имени на /turtle1/cmd_vel",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "Издатель запущен в /cmd_vel с типом geometry_msgs/msg/Twist; ros2 topic info /cmd_vel --verbose показал одного издателя и ноль подписчиков, черепаха не двигалась",
+    "root_cause": "Издатель использовал /cmd_vel, а нода turtlesim была подписана на полное имя /turtle1/cmd_vel; одинакового типа сообщения недостаточно, если имена топиков различаются",
+    "proof_after": "После изменения только имени на /turtle1/cmd_vel команда ros2 topic info показала одного издателя и одного подписчика, а черепаха начала двигаться"
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 2
+  },
+  "ai_used": false
+}
