@@ -90,3 +90,56 @@ printf 'exit=%s\n' "$?"
 python3 -m json.tool evidence/pr01/environment.json > /dev/null
 python3 .course-kit/v1/tools/check_practice.py PR01 --submission .
 ```
+
+## Практическая работа ПР02
+Пакет `turtle_bringup` содержит launch-файл для запуска готовой ноды
+`turtlesim_node`. Работа выполняется в ROS 2 Jazzy с доменом 16.
+### Сборка пакета
+Из корня workspace:
+```bash
+source /opt/ros/jazzy/setup.bash
+export ROS_DOMAIN_ID=16
+colcon build --symlink-install --packages-select turtle_bringup
+```
+### Запуск через launch-файл
+В новом терминале из корня workspace:
+```bash
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
+export ROS_DOMAIN_ID=16
+ros2 pkg prefix turtle_bringup
+ros2 launch turtle_bringup sim.launch.py
+```
+После запуска открывается окно turtlesim и в графе появляется нода
+`/turtlesim`. Запуск останавливается сочетанием `Ctrl+C`; вместе с launch
+завершается запущенная им нода turtlesim.
+### Проверка графа и отправка команды
+В другом терминале с тем же окружением и доменом:
+```bash
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
+export ROS_DOMAIN_ID=16
+ros2 node list --no-daemon --spin-time 2
+ros2 topic pub --once /turtle1/cmd_vel geometry_msgs/msg/Twist \
+  '{linear: {x: 1.0}, angular: {z: 0.5}}'
+```
+Команда задаёт движение вперёд по дуге против часовой стрелки.
+### Воспроизведение ошибки имени топика
+Ошибочный издатель запускается в топике `/cmd_vel`, на который нода
+`/turtlesim` не подписана:
+```bash
+ros2 topic pub --rate 1 --wait-matching-subscriptions 0 \
+  /cmd_vel geometry_msgs/msg/Twist \
+  '{linear: {x: 1.0}, angular: {z: 0.5}}'
+```
+После остановки издателя через `Ctrl+C` исправляется только полное имя топика:
+```bash
+ros2 topic pub --rate 1 --wait-matching-subscriptions 0 \
+  /turtle1/cmd_vel geometry_msgs/msg/Twist \
+  '{linear: {x: 1.0}, angular: {z: 0.5}}'
+```
+### Локальная проверка
+```bash
+python3 -m py_compile src/turtle_bringup/launch/sim.launch.py
+python3 .course-kit/v1/tools/check_practice.py PR02 --submission .
+```
