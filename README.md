@@ -143,3 +143,41 @@ ros2 topic pub --rate 1 --wait-matching-subscriptions 0 \
 python3 -m py_compile src/turtle_bringup/launch/sim.launch.py
 python3 .course-kit/v1/tools/check_practice.py PR02 --submission .
 ```
+
+## Практическая работа ПР03
+
+Пакет `patrol` содержит ноду, которая подписывается на `/turtle1/pose` и
+публикует команды `geometry_msgs/msg/Twist` с периодом 0,1 секунды.
+
+### Сборка и тесты
+
+```bash
+source /opt/ros/jazzy/setup.bash
+colcon build --symlink-install --packages-select turtle_bringup patrol
+source install/setup.bash
+python3 -m pytest src/patrol/test
+```
+
+### Запуск без remap
+
+```bash
+ros2 run patrol patrol
+```
+
+Относительное имя `cmd_vel` разрешается в `/cmd_vel`, поэтому издатель не
+соединяется с подписчиком turtlesim в `/turtle1/cmd_vel`.
+
+### Запуск с remap
+
+```bash
+ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel
+```
+
+Remap связывает издателя patrol с подписчиком turtlesim без изменения кода
+ноды. Ожидаемая частота публикации команды — около 10 Гц.
+
+### Проверка evidence
+
+```bash
+python3 .course-kit/v1/tools/check_practice.py PR03 --submission .
+```
