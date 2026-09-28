@@ -19,7 +19,6 @@ def command_from_pose(pose, turn_rate=0.3, linear_speed=0.5):
 
 def validate_values(publish_hz, linear_speed, turn_rate):
     checks = (
-        ('publish_hz', publish_hz, 1.0, 30.0),
         ('linear_speed', linear_speed, 0.0, 1.0),
         ('turn_rate', turn_rate, -1.0, 1.0),
     )
