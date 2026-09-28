@@ -1,0 +1,234 @@
+
+$ ros2 service type /clear
+std_srvs/srv/Empty
+[exit=0]
+
+$ ros2 interface show std_srvs/srv/Empty
+---
+[exit=0]
+
+$ ros2 service call /clear std_srvs/srv/Empty \{\}
+waiting for service to become available...
+requester: making request: std_srvs.srv.Empty_Request()
+
+response:
+std_srvs.srv.Empty_Response()
+
+[exit=0]
+
+$ ros2 action list -t
+/turtle1/rotate_absolute [turtlesim/action/RotateAbsolute]
+[exit=0]
+
+$ ros2 interface show turtlesim/action/RotateAbsolute
+# The desired heading in radians
+float32 theta
+---
+# The angular displacement in radians to the starting position
+float32 delta
+---
+# The remaining rotation in radians
+float32 remaining
+[exit=0]
+
+$ ros2 action send_goal /turtle1/rotate_absolute turtlesim/action/RotateAbsolute \{theta:\ 1.57\} --feedback
+Waiting for an action server to become available...
+Sending goal:
+     theta: 1.57
+
+Goal accepted with ID: 28be8ea1153749d896dac1174f281326
+
+Feedback:
+    remaining: -1.0108586549758911
+
+Feedback:
+    remaining: -0.9948588609695435
+
+Feedback:
+    remaining: -0.9788588285446167
+
+Feedback:
+    remaining: -0.9628587961196899
+
+Feedback:
+    remaining: -0.9468587636947632
+
+Feedback:
+    remaining: -0.9308587312698364
+
+Feedback:
+    remaining: -0.9148586988449097
+
+Feedback:
+    remaining: -0.8988586664199829
+
+Feedback:
+    remaining: -0.8828586339950562
+
+Feedback:
+    remaining: -0.8668588399887085
+
+Feedback:
+    remaining: -0.8508588075637817
+
+Feedback:
+    remaining: -0.834858775138855
+
+Feedback:
+    remaining: -0.8188587427139282
+
+Feedback:
+    remaining: -0.8028587102890015
+
+Feedback:
+    remaining: -0.7868586778640747
+
+Feedback:
+    remaining: -0.770858645439148
+
+Feedback:
+    remaining: -0.7548588514328003
+
+Feedback:
+    remaining: -0.7388588190078735
+
+Feedback:
+    remaining: -0.7228587865829468
+
+Feedback:
+    remaining: -0.70685875415802
+
+Feedback:
+    remaining: -0.6908587217330933
+
+Feedback:
+    remaining: -0.6748586893081665
+
+Feedback:
+    remaining: -0.6588586568832397
+
+Feedback:
+    remaining: -0.6428588628768921
+
+Feedback:
+    remaining: -0.6268588304519653
+
+Feedback:
+    remaining: -0.6108587980270386
+
+Feedback:
+    remaining: -0.5948587656021118
+
+Feedback:
+    remaining: -0.5788587331771851
+
+Feedback:
+    remaining: -0.5628587007522583
+
+Feedback:
+    remaining: -0.5468586683273315
+
+Feedback:
+    remaining: -0.5308586359024048
+
+Feedback:
+    remaining: -0.5148588418960571
+
+Feedback:
+    remaining: -0.49885880947113037
+
+Feedback:
+    remaining: -0.4828587770462036
+
+Feedback:
+    remaining: -0.46685874462127686
+
+Feedback:
+    remaining: -0.4508587121963501
+
+Feedback:
+    remaining: -0.43485867977142334
+
+Feedback:
+    remaining: -0.41885876655578613
+
+Feedback:
+    remaining: -0.4028587341308594
+
+Feedback:
+    remaining: -0.3868587017059326
+
+Feedback:
+    remaining: -0.3708587884902954
+
+Feedback:
+    remaining: -0.35485875606536865
+
+Feedback:
+    remaining: -0.3388587236404419
+
+Feedback:
+    remaining: -0.32285869121551514
+
+Feedback:
+    remaining: -0.30685877799987793
+
+Feedback:
+    remaining: -0.29085874557495117
+
+Feedback:
+    remaining: -0.2748587131500244
+
+Feedback:
+    remaining: -0.2588587999343872
+
+Feedback:
+    remaining: -0.24285876750946045
+
+Feedback:
+    remaining: -0.2268587350845337
+
+Feedback:
+    remaining: -0.21085870265960693
+
+Feedback:
+    remaining: -0.19485878944396973
+
+Feedback:
+    remaining: -0.17885875701904297
+
+Feedback:
+    remaining: -0.1628587245941162
+
+Feedback:
+    remaining: -0.14685869216918945
+
+Feedback:
+    remaining: -0.13085877895355225
+
+Feedback:
+    remaining: -0.11485874652862549
+
+Feedback:
+    remaining: -0.09885871410369873
+
+Feedback:
+    remaining: -0.08285880088806152
+
+Feedback:
+    remaining: -0.06685876846313477
+
+Feedback:
+    remaining: -0.05085873603820801
+
+Feedback:
+    remaining: -0.03485870361328125
+
+Feedback:
+    remaining: -0.018858790397644043
+
+Result:
+    delta: 0.9919999837875366
+
+Goal finished with status: SUCCEEDED
+[exit=0]

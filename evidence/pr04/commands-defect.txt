@@ -1,0 +1,66 @@
+
+$ ros2 param set /patrol publish_hz 5.0
+Set parameter successful
+[exit=0]
+
+$ timeout --signal=INT 15s ros2 topic hz /turtle1/cmd_vel
+average rate: 5.001
+	min: 0.200s max: 0.200s std dev: 0.00008s window: 7
+average rate: 5.000
+	min: 0.178s max: 0.221s std dev: 0.00876s window: 12
+average rate: 4.999
+	min: 0.178s max: 0.221s std dev: 0.00736s window: 17
+average rate: 5.000
+	min: 0.178s max: 0.221s std dev: 0.00634s window: 23
+average rate: 5.000
+	min: 0.178s max: 0.221s std dev: 0.00565s window: 29
+average rate: 5.000
+	min: 0.178s max: 0.221s std dev: 0.00514s window: 35
+average rate: 5.000
+	min: 0.178s max: 0.221s std dev: 0.00481s window: 40
+average rate: 5.000
+	min: 0.178s max: 0.221s std dev: 0.00454s window: 45
+[exit=124]
+
+$ timeout 15s ros2 param set /patrol publish_hz 0.0
+[exit=124]
+Defective node exited after publish_hz=0.0
+Traceback (most recent call last):
+  File "/tmp/tmp.1dvNwh5QmQ/patrol.py", line 129, in <module>
+    main()
+  File "/tmp/tmp.1dvNwh5QmQ/patrol.py", line 119, in main
+    rclpy.spin(node)
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/__init__.py", line 247, in spin
+    executor.spin_once()
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 926, in spin_once
+    self._spin_once_impl(timeout_sec)
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 918, in _spin_once_impl
+    raise handler.exception()
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/task.py", line 286, in _execute_coroutine_step
+    result = coro.send(None)
+             ^^^^^^^^^^^^^^^
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 592, in handler
+    await call_coroutine()
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 531, in _execute
+    response = await await_or_execute(srv.callback, request, srv.srv_type.Response())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 115, in await_or_execute
+    return callback(*args)
+           ^^^^^^^^^^^^^^^
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/parameter_service.py", line 117, in _set_parameters_callback
+    result = node.set_parameters_atomically([param])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 839, in set_parameters_atomically
+    return self._set_parameters_atomically(parameter_list)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 859, in _set_parameters_atomically
+    return self._set_parameters_atomically_common(parameter_list)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 962, in _set_parameters_atomically_common
+    self._call_post_set_parameters_callback(parameter_list)
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1055, in _call_post_set_parameters_callback
+    callback(parameter_list)
+  File "/tmp/tmp.1dvNwh5QmQ/patrol.py", line 89, in apply
+    1.0 / new_hz,
+    ~~~~^~~~~~~~
+ZeroDivisionError: float division by zero

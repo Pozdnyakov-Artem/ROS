@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR04",
+  "commit": "f1079930e8ed6a412fa8928d4599c2099a47fb60",
+  "course_kit": {
+    "version": "v1-w04",
+    "archive_sha256": "fec6b4e886c19146078bf69fbf90a19279a4cd33f656642395350b299efeb226"
+  },
+  "commands": [
+    "colcon build --symlink-install --packages-select turtle_bringup patrol",
+    "source install/setup.bash",
+    "python3 -m pytest src/patrol/test",
+    "bash evidence/pr04/run_experiments.sh",
+    "ros2 param get /patrol publish_hz",
+    "timeout --signal=INT 15s ros2 topic hz /turtle1/cmd_vel",
+    "ros2 param set /patrol publish_hz 5.0",
+    "ros2 param set /patrol publish_hz 0.0",
+    "ros2 param set /patrol publish_hz -1.0",
+    "ros2 param set /patrol linear_speed 0.8",
+    "ros2 param set /patrol turn_rate -0.4",
+    "ros2 topic echo /turtle1/cmd_vel --once",
+    "ros2 service type /clear",
+    "ros2 interface show std_srvs/srv/Empty",
+    "ros2 service call /clear std_srvs/srv/Empty '{}'",
+    "ros2 action list -t",
+    "ros2 interface show turtlesim/action/RotateAbsolute",
+    "ros2 action send_goal /turtle1/rotate_absolute turtlesim/action/RotateAbsolute '{theta: 1.57}' --feedback",
+    "python3 .course-kit/v1/tools/check_practice.py PR04 --submission ."
+  ],
+  "tests": [
+    {"name": "Сборка patrol и turtle_bringup", "status": "passed"},
+    {"name": "pytest: 38 passed; диапазоны, NaN, бесконечность, начальные параметры, атомарность, единственный таймер и стиль", "status": "passed"},
+    {"name": "Штатный тест авторских заголовков отключён в исходном пакете", "status": "skipped"},
+    {"name": "Реальная смена частоты 10.023 -> 5.003 Гц", "status": "passed"},
+    {"name": "После отказа для нуля параметр 5.0 и поток 5.000 Гц сохранены", "status": "passed"},
+    {"name": "Отрицательная частота отклонена; Twist принимает скорости 0.8 и -0.4", "status": "passed"},
+    {"name": "ZeroDivisionError воспроизведён в отдельной ветке", "status": "passed"},
+    {"name": "Вызов /clear и действие rotate_absolute с feedback завершились успешно", "status": "passed"}
+  ],
+  "defect": {
+    "reproducer": "Ветка pr04-frequency-defect, коммит 0b4fa6aa56dbcde812e8e475273562de29238022: после установки publish_hz=5.0 отправить ros2 param set /patrol publish_hz 0.0. Нода завершилась с ZeroDivisionError: float division by zero; CLI не получил ответ и был остановлен timeout. Полный вывод в commands-defect.txt и patrol-defect.txt.",
+    "root_cause": "Проверка частоты отключена: ноль принимается, apply отменяет и удаляет прежний таймер, затем вычисляет 1.0 / new_hz. Исключение выходит из callback и завершает executor.",
+    "proof_after": "Та же команда в исправленной ноде отклонена с причиной publish_hz: значение должно быть от 1.0 до 30.0. param get вернул 5.0, измерение потока показало 5.000 Гц. Тесты подтвердили сохранение объекта таймера и полей при отклонении нуля, отрицательной частоты и NaN."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0.5
+  },
+  "ai_used": true
+}
