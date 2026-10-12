@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR05",
+  "commit": "20aea5f5daab67b26b0de61de1454f80e8578a67",
+  "course_kit": {
+    "version": "v1-w05",
+    "archive_sha256": "bca214e3de6f90f9513049dfa0f36fee65ad834da502dc3f3f8fb443517b5197"
+  },
+  "commands": [
+    "source /opt/ros/jazzy/setup.bash",
+    "colcon build --symlink-install --packages-select turtle_bringup patrol course_bringup",
+    "source install/setup.bash",
+    "colcon test --packages-select turtle_bringup patrol course_bringup --event-handlers console_direct+",
+    "colcon test-result --verbose",
+    "ros2 launch course_bringup patrol.launch.py --show-args",
+    "ros2 launch course_bringup patrol.launch.py namespace:=robot_a record:=false subscriber_reliability:=reliable",
+    "ros2 topic info /robot_a/sensor_pose --verbose --no-daemon --spin-time 2",
+    "timeout 15s ros2 topic echo /robot_a/sensor_pose turtlesim/msg/Pose --qos-reliability reliable --once",
+    "ros2 launch course_bringup patrol.launch.py namespace:=robot_a record:=false subscriber_reliability:=best_effort",
+    "timeout 15s ros2 topic echo /robot_a/sensor_pose turtlesim/msg/Pose --qos-reliability best_effort --once",
+    "ros2 bag play evidence/pr05/bag --qos-profile-overrides-path config/qos-overrides.yaml --loop",
+    "ros2 run patrol pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=reliable",
+    "ros2 run patrol pose_subscriber --ros-args -r __ns:=/robot_a -p reliability:=best_effort",
+    "ros2 bag info evidence/pr05/bag"
+  ],
+  "tests": [
+    {
+      "name": "Живой поток: reliable не получает сообщения, echo exit=124; best_effort получает Pose, echo exit=0",
+      "status": "passed"
+    },
+    {
+      "name": "Исходная запись MCAP: один топик /robot_a/sensor_pose, 5661 сообщение, длительность 87.037163583 с",
+      "status": "passed"
+    },
+    {
+      "name": "Один исходный bag с best_effort override: reliable echo exit=124; best_effort echo exit=0",
+      "status": "passed"
+    },
+    {
+      "name": "Собственный подписчик на replay: reliable received=0; best_effort received=61",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "Запустить patrol.launch.py с namespace:=robot_a, subscriber_reliability:=reliable, record:=false. Издатель сенсорного потока BEST_EFFORT и подписчик RELIABLE видны в topic info; счётчик подписчика равен 0. Повторная CLI-проверка с явно заданным turtlesim/msg/Pose и timeout 15s завершилась с кодом 124. Тот же результат получен на исходном bag с config/qos-overrides.yaml. Вывод сохранён в qos-before.txt.",
+    "root_cause": "Подписчик запрашивает RELIABLE, а издатель предлагает BEST_EFFORT. Политики reliability несовместимы: наличие топика и совпадение типа не обеспечивают доставку.",
+    "proof_after": "После перезапуска с subscriber_reliability:=best_effort callback получает сообщения: счётчик в повторном живом опыте достиг 998, echo вернул Pose и код 0. При проигрывании той же записи с best_effort override echo также вернул Pose и код 0; собственный подписчик получил 61 сообщение. Исходный MCAP не изменён: SHA-256 add752582ef4db8a0ee240472a6caf277466d5b199b4394b661db4b969b2a60c. В первоначальном qos-after.txt был CLI timeout=124; исходный результат сохранён, а успешный повтор явно выделен разделом LIVE RECHECK. Логи, метаданные и ros2 bag info сохранены в evidence/pr05."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true,
+    "replay_verified": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 3
+  },
+  "ai_used": true
+}

@@ -16,3 +16,9 @@
 - Модель: GPT-6; инструмент: OpenAI Codex, терминал PowerShell и Docker exec.
 - Характер помощи: объяснение параметров, validate/apply, доработка тестов и CI; оформление evidence; объяснение сервисов и действий.
 - Способ проверки: pytest, checker PR04 и CI.
+
+## PR05
+
+- Использован ИИ: да.
+- Модель: GPT-6; инструмент: OpenAI Codex, PowerShell и Docker exec.
+- Характер помощи: объяснение launch, namespace, remap, QoS и rosbag2; исправление импортов; оформление метаданных пакета, отчёта и evidence; обновление CI.
