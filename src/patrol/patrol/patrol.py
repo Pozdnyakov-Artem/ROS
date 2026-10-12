@@ -59,7 +59,7 @@ class Patrol(Node):
 
         self.pose_sub = self.create_subscription(
             Pose,
-            '/turtle1/pose',
+            'turtle1/pose',
             self.on_pose,
             10,
         )

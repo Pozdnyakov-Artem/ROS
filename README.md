@@ -181,3 +181,72 @@ Remap связывает издателя patrol с подписчиком turtl
 ```bash
 python3 .course-kit/v1/tools/check_practice.py PR03 --submission .
 ```
+
+## Практическая работа ПР05
+
+Пакет `course_bringup` запускает глобальный turtlesim, ноду `patrol`,
+ретранслятор положения и подписчик с настраиваемым QoS. Ноды управления
+и проверки работают в пространстве имён `/robot_a`. Команды скорости
+переназначены в `/turtle1/cmd_vel`, а сенсорный поток публикуется
+в `/robot_a/sensor_pose` с `best_effort`.
+
+### Сборка и тесты
+
+Из корня рабочего пространства в контейнере ROS 2 Jazzy:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+colcon build --symlink-install --packages-select turtle_bringup patrol course_bringup
+source install/setup.bash
+colcon test --packages-select turtle_bringup patrol course_bringup --event-handlers console_direct+
+colcon test-result --verbose
+```
+
+### Запуск опыта
+
+Во всех терминалах подключите ROS и `install/setup.bash` и установите
+одинаковый `ROS_DOMAIN_ID`. Для несовместимого подписчика:
+
+```bash
+export ROS_DOMAIN_ID=16
+ros2 launch course_bringup patrol.launch.py \
+  namespace:=robot_a subscriber_reliability:=reliable record:=false
+```
+
+После остановки первого запуска исправленный вариант с записью:
+
+```bash
+ros2 launch course_bringup patrol.launch.py \
+  namespace:=robot_a subscriber_reliability:=best_effort \
+  record:=true bag_dir:=evidence/pr05/bag
+```
+
+Каталог записи должен быть свободен. Существующий `evidence/pr05/bag`
+содержит исходный опыт; для новой записи выберите другой путь.
+
+### Повтор исходной записи
+
+Остановите живой launch и выполните:
+
+```bash
+ros2 bag play evidence/pr05/bag \
+  --qos-profile-overrides-path config/qos-overrides.yaml --loop
+```
+
+В другом терминале с тем же окружением и доменом:
+
+```bash
+timeout 15s ros2 topic echo /robot_a/sensor_pose turtlesim/msg/Pose \
+  --qos-reliability reliable --once
+timeout 15s ros2 topic echo /robot_a/sensor_pose turtlesim/msg/Pose \
+  --qos-reliability best_effort --once
+```
+
+Первый подписчик завершается по тайм-ауту с кодом 124. Второй получает
+сообщение и завершается с кодом 0. Тот же результат проверен на живом
+потоке и собственным `pose_subscriber`. Подробности, результаты и порядок
+завершения сдачи находятся в `evidence/pr05/README.md`.
+
+CI использует фиксированную ревизию course kit `v1-w05`, собирает и
+тестирует три пакета, затем проверяет отчёт PR05. Поле `commit` в отчёте
+нужно заполнить SHA коммита реализации перед окончательной проверкой.

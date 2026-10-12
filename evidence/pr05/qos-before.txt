@@ -1,0 +1,173 @@
+PR05: incompatible QoS
+Final verification: LIVE reliable echo_exit=124, received=0; REPLAY reliable echo_exit=124, received=0.
+Original observations are preserved below, followed by marked rechecks.
+
+=== ORIGINAL LIVE OBSERVATION ===
+LIVE BEFORE: publisher=best_effort subscriber=reliable
+/parameter_events [rcl_interfaces/msg/ParameterEvent]
+/robot_a/sensor_pose [turtlesim/msg/Pose]
+/rosout [rcl_interfaces/msg/Log]
+/turtle1/cmd_vel [geometry_msgs/msg/Twist]
+/turtle1/color_sensor [turtlesim/msg/Color]
+/turtle1/pose [turtlesim/msg/Pose]
+Type: turtlesim/msg/Pose
+
+Publisher count: 1
+
+Node name: pose_replay
+Node namespace: /robot_a
+Topic type: turtlesim/msg/Pose
+Topic type hash: RIHS01_739beba26bcba6920404ba722b7b8321348512f92ea5be235c47251940dd8aa9
+Endpoint type: PUBLISHER
+GID: 01.0f.eb.7d.22.50.26.39.00.00.00.00.00.00.13.03
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): UNKNOWN
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Subscription count: 1
+
+Node name: pose_subscriber
+Node namespace: /robot_a
+Topic type: turtlesim/msg/Pose
+Topic type hash: RIHS01_739beba26bcba6920404ba722b7b8321348512f92ea5be235c47251940dd8aa9
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.eb.7d.23.50.32.1d.00.00.00.00.00.00.13.04
+QoS profile:
+  Reliability: RELIABLE
+  History (Depth): UNKNOWN
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+String value is: reliable
+echo_exit=124
+
+=== LIVE RECHECK: reliable; explicit Pose type; ROS_DOMAIN_ID=210; timeout=15s ===
+Type: turtlesim/msg/Pose
+
+Publisher count: 1
+
+Node name: pose_replay
+Node namespace: /robot_a
+Topic type: turtlesim/msg/Pose
+Topic type hash: RIHS01_739beba26bcba6920404ba722b7b8321348512f92ea5be235c47251940dd8aa9
+Endpoint type: PUBLISHER
+GID: 01.0f.eb.7d.b6.6a.bd.94.00.00.00.00.00.00.13.03
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): UNKNOWN
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Subscription count: 1
+
+Node name: pose_subscriber
+Node namespace: /robot_a
+Topic type: turtlesim/msg/Pose
+Topic type hash: RIHS01_739beba26bcba6920404ba722b7b8321348512f92ea5be235c47251940dd8aa9
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.eb.7d.b7.6a.96.cc.00.00.00.00.00.00.13.04
+QoS profile:
+  Reliability: RELIABLE
+  History (Depth): UNKNOWN
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+[WARN] [1791788271.308312634] [_ros2cli_27419]: New publisher discovered on topic '/robot_a/sensor_pose', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
+
+echo_exit=124
+[INFO] [launch]: All log files can be found below /home/ros/.ros/log/2026-10-12-06-57-34-625652-77e102b88c20-27299
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [launch.user]: namespace=robot_a subscriber_reliability=reliable record=false
+[INFO] [turtlesim_node-1]: process started with pid [27316]
+[INFO] [patrol-2]: process started with pid [27317]
+[INFO] [pose_relay-3]: process started with pid [27318]
+[INFO] [pose_subscriber-4]: process started with pid [27319]
+[turtlesim_node-1] QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-ros'
+[turtlesim_node-1] [INFO] [1791788255.391447398] [turtlesim]: Starting turtlesim with node name /turtlesim
+[turtlesim_node-1] [INFO] [1791788255.409289184] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
+[pose_relay-3] [WARN] [1791788258.664474669] [robot_a.pose_replay]: New subscription discovered on topic 'sensor_pose', requesting incompatible QoS. No messages will be sent to it. Last incompatible policy: RELIABILITY
+[pose_subscriber-4] [INFO] [1791788258.727125067] [robot_a.pose_subscriber]: Reliability: reliable
+[pose_subscriber-4] [WARN] [1791788258.729206641] [robot_a.pose_subscriber]: New publisher discovered on topic 'sensor_pose', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
+[pose_subscriber-4] [INFO] [1791788259.622694920] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788260.620472234] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788261.620707730] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788262.631782089] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788263.624556443] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788264.619774428] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788265.618591531] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788266.623206658] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788267.618192837] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788268.621274847] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788269.625177119] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788270.617985550] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_relay-3] [WARN] [1791788271.262951350] [robot_a.pose_replay]: New subscription discovered on topic 'sensor_pose', requesting incompatible QoS. No messages will be sent to it. Last incompatible policy: RELIABILITY
+[pose_subscriber-4] [INFO] [1791788271.618085594] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788272.622416434] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788273.617257019] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788274.623951804] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788275.618532395] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788276.635755417] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788277.623785881] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788278.627244420] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788279.619529296] [robot_a.pose_subscriber]: reliability=reliable received=0
+[pose_subscriber-4] [INFO] [1791788280.629737874] [robot_a.pose_subscriber]: reliability=reliable received=0
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [pose_subscriber-4]: sending signal 'SIGINT' to process[pose_subscriber-4]
+[INFO] [pose_relay-3]: sending signal 'SIGINT' to process[pose_relay-3]
+[INFO] [patrol-2]: sending signal 'SIGINT' to process[patrol-2]
+[INFO] [turtlesim_node-1]: sending signal 'SIGINT' to process[turtlesim_node-1]
+[turtlesim_node-1] [INFO] [1791788281.088069189] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [turtlesim_node-1]: process has finished cleanly [pid 27316]
+[INFO] [pose_subscriber-4]: process has finished cleanly [pid 27319]
+[INFO] [patrol-2]: process has finished cleanly [pid 27317]
+[INFO] [pose_relay-3]: process has finished cleanly [pid 27318]
+
+
+=== REPLAY: same original bag; reliable; timeout=15s ===
+Type: turtlesim/msg/Pose
+
+Publisher count: 1
+
+Node name: rosbag2_player
+Node namespace: /
+Topic type: turtlesim/msg/Pose
+Topic type hash: RIHS01_739beba26bcba6920404ba722b7b8321348512f92ea5be235c47251940dd8aa9
+Endpoint type: PUBLISHER
+GID: 01.0f.eb.7d.ef.6b.9f.c0.00.00.00.00.00.00.14.03
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): UNKNOWN
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Subscription count: 0
+
+[WARN] [1791788324.126306262] [_ros2cli_27695]: New publisher discovered on topic '/robot_a/sensor_pose', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
+
+echo_exit=124
+
+
+=== REPLAY OWN SUBSCRIBER: reliable ===
+[INFO] [1791788346.126834463] [robot_a.pose_subscriber]: Reliability: reliable
+[WARN] [1791788346.130366269] [robot_a.pose_subscriber]: New publisher discovered on topic 'sensor_pose', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
+[INFO] [1791788346.966398508] [robot_a.pose_subscriber]: reliability=reliable received=0
+[INFO] [1791788347.971415247] [robot_a.pose_subscriber]: reliability=reliable received=0
+[INFO] [1791788348.985087695] [robot_a.pose_subscriber]: reliability=reliable received=0
+
