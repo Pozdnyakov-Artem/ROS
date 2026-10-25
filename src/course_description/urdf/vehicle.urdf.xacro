@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="course_ackermann">
+  <xacro:arg name="wheelbase" default="0.8"/>
+  <xacro:arg name="track" default="0.62"/>
+  <xacro:arg name="wheel_radius" default="0.12"/>
+  <xacro:property name="wb" value="$(arg wheelbase)"/>
+  <xacro:property name="tr" value="$(arg track)"/>
+  <xacro:property name="radius" value="$(arg wheel_radius)"/>
+  <xacro:property name="wheel_width" value="0.07"/>
+
+  <material name="body_blue"><color rgba="0.05 0.36 0.72 1"/></material>
+  <material name="wheel_black"><color rgba="0.04 0.04 0.04 1"/></material>
+  <material name="sensor_orange"><color rgba="1 0.45 0.05 1"/></material>
+
+  <xacro:macro name="box_link" params="name sx sy sz mass material z:=0.0">
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 ${z}"/>
+        <geometry><box size="${sx} ${sy} ${sz}"/></geometry>
+        <material name="${material}"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${z}"/>
+        <geometry><box size="${sx} ${sy} ${sz}"/></geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0 0 ${z}"/>
+        <mass value="${mass}"/>
+        <inertia ixx="${mass*(sy*sy+sz*sz)/12.0}" ixy="0" ixz="0"
+                 iyy="${mass*(sx*sx+sz*sz)/12.0}" iyz="0"
+                 izz="${mass*(sx*sx+sy*sy)/12.0}"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <xacro:box_link name="base_link" sx="1.05" sy="0.52" sz="0.22"
+                  mass="12.0" material="body_blue" z="0.12"/>
+
+  <xacro:macro name="sensor" params="name">
+    <xacro:box_link name="${name}_link" sx="0.06" sy="0.04" sz="0.04"
+                    mass="0.033333333333" material="sensor_orange"/>
+    <joint name="${name}_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${name}_link"/>
+      <origin xyz="0.28 0 0.38" rpy="0 0 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:sensor name="camera"/>
+  <xacro:box_link name="lidar_link" sx="0.06" sy="0.04" sz="0.04"
+                  mass="0.033333333333" material="sensor_orange"/>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0.28 0 0.38" rpy="0 0 0"/>
+  </joint>
+  <xacro:sensor name="imu"/>
+
+  <xacro:macro name="wheel" params="name parent x y">
+    <link name="${name}_wheel">
+      <visual>
+        <origin rpy="${pi/2.0} 0 0"/>
+        <geometry><cylinder radius="${radius}" length="${wheel_width}"/></geometry>
+        <material name="wheel_black"/>
+      </visual>
+      <collision>
+        <origin rpy="${pi/2.0} 0 0"/>
+        <geometry><cylinder radius="${radius}" length="${wheel_width}"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="0.8"/>
+        <inertia ixx="${0.8*(3*radius*radius+wheel_width*wheel_width)/12.0}"
+                 ixy="0" ixz="0" iyy="${0.8*radius*radius/2.0}" iyz="0"
+                 izz="${0.8*(3*radius*radius+wheel_width*wheel_width)/12.0}"/>
+      </inertial>
+    </link>
+    <joint name="${name}_wheel_joint" type="continuous">
+      <parent link="${parent}"/>
+      <child link="${name}_wheel"/>
+      <origin xyz="${x} ${y} 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="front_assembly" params="side sign">
+    <xacro:box_link name="front_${side}_knuckle" sx="0.04" sy="0.04" sz="0.04"
+                    mass="0.2" material="wheel_black"/>
+    <joint name="front_${side}_steering_joint" type="revolute">
+      <parent link="base_link"/>
+      <child link="front_${side}_knuckle"/>
+      <origin xyz="${wb/2.0} ${sign*tr/2.0} 0"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-0.55" upper="0.55" effort="25" velocity="1.0"/>
+    </joint>
+    <xacro:wheel name="front_${side}" parent="front_${side}_knuckle" x="0" y="0"/>
+  </xacro:macro>
+
+  <xacro:front_assembly side="left" sign="1"/>
+  <xacro:front_assembly side="right" sign="-1"/>
+  <xacro:wheel name="rear_left" parent="base_link" x="${-wb/2.0}" y="${tr/2.0}"/>
+  <xacro:wheel name="rear_right" parent="base_link" x="${-wb/2.0}" y="${-tr/2.0}"/>
+</robot>
