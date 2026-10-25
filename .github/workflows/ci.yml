@@ -3,8 +3,8 @@ name: ROS checks
 on: [push, pull_request]
 
 env:
-  COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w05-bca214e3de6f.tar.gz
-  COURSE_KIT_SHA256: bca214e3de6f90f9513049dfa0f36fee65ad834da502dc3f3f8fb443517b5197
+  COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w07-9b7fdd5424d3.tar.gz
+  COURSE_KIT_SHA256: 9b7fdd5424d3d97e47d51dbe23064934585e62135dc2902844dd679529bda929
 
 jobs:
   test:
@@ -17,6 +17,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install description tools
+        shell: bash
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            ros-jazzy-xacro ros-jazzy-robot-state-publisher \
+            ros-jazzy-ament-cmake-pytest liburdfdom-tools python3-pytest
+
       - name: Download course kit
         shell: bash
         run: |
@@ -25,20 +33,30 @@ jobs:
           mkdir -p .course-kit
           tar -xzf /tmp/course-kit.tar.gz -C .course-kit
 
-      - name: Build PR05 packages
+      - name: Build packages
         shell: bash
         run: |
           source /opt/ros/jazzy/setup.bash
-          colcon build --symlink-install --packages-select turtle_bringup patrol course_bringup
+          colcon build --symlink-install --packages-select \
+            turtle_bringup patrol course_bringup course_description
 
-      - name: Test PR05 packages
+      - name: Check URDF
+        shell: bash
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          xacro src/course_description/urdf/vehicle.urdf.xacro > /tmp/vehicle.urdf
+          check_urdf /tmp/vehicle.urdf
+
+      - name: Test packages
         shell: bash
         run: |
           source /opt/ros/jazzy/setup.bash
           source install/setup.bash
-          colcon test --packages-select turtle_bringup patrol course_bringup --event-handlers console_direct+
+          colcon test --packages-select \
+            turtle_bringup patrol course_bringup course_description \
+            --event-handlers console_direct+
           colcon test-result --verbose
 
-      - name: Check PR05 evidence
+      - name: Check PR06 evidence
         shell: bash
-        run: python3 .course-kit/v1/tools/check_practice.py PR05 --submission .
+        run: python3 .course-kit/v1/tools/check_practice.py PR06 --submission .

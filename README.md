@@ -250,3 +250,69 @@ timeout 15s ros2 topic echo /robot_a/sensor_pose turtlesim/msg/Pose \
 CI использует фиксированную ревизию course kit `v1-w05`, собирает и
 тестирует три пакета, затем проверяет отчёт PR05. Поле `commit` в отчёте
 нужно заполнить SHA коммита реализации перед окончательной проверкой.
+
+## Практическая работа ПР06
+
+Пакет `course_description` описывает корпус Ackermann-робота, четыре
+колеса, два поворотных звена, камеру, лидар и IMU. Колёсная база — 0,8 м,
+колея — 0,62 м, радиус колеса — 0,12 м. Размеры взяты из SDF course kit;
+исходный SDF не изменён. Связи модели публикует один `robot_state_publisher`.
+
+### Сборка и проверки
+
+В Bash внутри ROS 2 Jazzy контейнера, из корня workspace:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+colcon build --symlink-install --packages-select course_description
+source install/setup.bash
+xacro src/course_description/urdf/vehicle.urdf.xacro > /tmp/vehicle.urdf
+check_urdf /tmp/vehicle.urdf
+colcon test --packages-select course_description --event-handlers console_direct+
+colcon test-result --verbose
+```
+
+### Просмотр и положения колёс
+
+Во всех терминалах подключить ROS и `install/setup.bash`, установить
+одинаковый домен; повторная проверка выполнялась в `ROS_DOMAIN_ID=16`.
+
+```bash
+export ROS_DOMAIN_ID=16
+ros2 launch course_description display.launch.py
+```
+
+В RViz используется `Fixed Frame=base_link`. Камера, лидар и IMU
+публикуются в `/tf_static` сразу. Положения подвижных звеньев появляются
+в `/tf` после поступления `/joint_states`. Для их отображения во втором
+терминале с тем же окружением и доменом:
+
+```bash
+ros2 topic pub -r 10 /joint_states sensor_msgs/msg/JointState \
+  '{header: auto, name: [front_left_steering_joint, front_right_steering_joint, front_left_wheel_joint, front_right_wheel_joint, rear_left_wheel_joint, rear_right_wheel_joint], position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}'
+```
+
+Для запуска без окна используется `rviz:=false`. Перед повторным запуском
+остановить прежний launch, чтобы не получить двух издателей преобразований.
+
+### Дефект и результаты
+
+В коммите `1823921` родитель `lidar_link` изменён с `base_link` на
+`camera_link` при прежнем смещении `(0.28, 0, 0.38)`. Положение лидара
+относительно корпуса стало `(0.56, 0, 0.76)`. `check_urdf` принимает такое
+дерево, но неизменённый тест родителя лидара падает. В рабочей модели
+родитель восстановлен: тест проходит, координаты снова `(0.28, 0, 0.38)`.
+
+`evidence/pr06/model-check.txt` содержит команды и результаты до/после,
+`frames.md` — таблицу связей и владельцев. В `tf-qos.txt` поздний подписчик
+`reliable/transient_local` получает историю `/tf_static` с кодом 0,
+а `reliable/volatile` завершается без сообщений по тайм-ауту с кодом 124.
+
+Для ПР06 локально и в CI используется фиксированный course kit `v1-w07`.
+После создания коммита окончательной реализации его полный SHA записывается
+в `evidence/pr06/report.json`, затем отчёт и `AI_USAGE.md` сохраняются
+отдельным коммитом. Перед сдачей:
+
+```bash
+python3 .course-kit/v1/tools/check_practice.py PR06 --submission .
+```
