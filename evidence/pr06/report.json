@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR06",
+  "commit": "64342f6bfa394603ff77f8eb03047bac424ad89b",
+  "course_kit": {
+    "version": "v1-w07",
+    "archive_sha256": "9b7fdd5424d3d97e47d51dbe23064934585e62135dc2902844dd679529bda929"
+  },
+  "environment": {
+    "ros": "jazzy",
+    "runtime": "Docker",
+    "ros_domain_id": 129,
+    "use_sim_time": false
+  },
+  "commands": [
+    "colcon build --symlink-install --packages-select turtle_bringup patrol course_bringup course_description",
+    "colcon test --packages-select turtle_bringup patrol course_bringup course_description --event-handlers console_direct+",
+    "colcon test-result --verbose",
+    "xacro /tmp/pr06-final-verify/broken/urdf/vehicle.urdf.xacro",
+    "check_urdf /tmp/pr06-final-verify/broken.urdf",
+    "python3 -m pytest -q /tmp/pr06-final-verify/broken/test/test_description.py -k sensor_contract",
+    "ros2 launch course_description display.launch.py rviz:=false model:=/tmp/pr06-final-verify/broken/urdf/vehicle.urdf.xacro",
+    "ros2 topic pub -r 10 /joint_states sensor_msgs/msg/JointState '{header: auto, name: [front_left_steering_joint, front_right_steering_joint, front_left_wheel_joint, front_right_wheel_joint, rear_left_wheel_joint, rear_right_wheel_joint], position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}'",
+    "timeout 20s ros2 topic echo /tf_static tf2_msgs/msg/TFMessage --once --qos-durability transient_local --qos-reliability reliable",
+    "timeout 20s ros2 run tf2_ros tf2_echo base_link lidar_link",
+    "ros2 run tf2_tools view_frames",
+    "xacro src/course_description/urdf/vehicle.urdf.xacro",
+    "check_urdf /tmp/pr06-final-verify/fixed.urdf",
+    "python3 -m pytest -q src/course_description/test/test_description.py -k sensor_contract",
+    "python3 -m pytest -q src/course_description/test/test_description.py",
+    "ros2 launch course_description display.launch.py model:=/workspaces/ros/src/course_description/urdf/vehicle.urdf.xacro",
+    "ros2 topic pub -r 10 /joint_states sensor_msgs/msg/JointState '{header: auto, name: [front_left_steering_joint, front_right_steering_joint, front_left_wheel_joint, front_right_wheel_joint, rear_left_wheel_joint, rear_right_wheel_joint], position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}'",
+    "timeout 20s ros2 topic echo /tf_static tf2_msgs/msg/TFMessage --once --qos-durability transient_local --qos-reliability reliable",
+    "timeout 20s ros2 run tf2_ros tf2_echo base_link lidar_link",
+    "ros2 run tf2_tools view_frames",
+    "ros2 topic info /tf_static --verbose",
+    "timeout 10s ros2 topic echo /tf_static tf2_msgs/msg/TFMessage --once --qos-durability transient_local --qos-reliability reliable",
+    "timeout 10s ros2 topic echo /tf_static tf2_msgs/msg/TFMessage --once --qos-durability volatile --qos-reliability reliable"
+  ],
+  "tests": [
+    {
+      "name": "Summary: 54 tests, 0 errors, 0 failures, 3 skipped",
+      "status": "passed"
+    },
+    {
+      "name": "Fixed description: eight pytest cases and check_urdf pass",
+      "status": "passed"
+    },
+    {
+      "name": "Defect detection: unchanged lidar-parent test fails as expected; check_urdf still accepts the tree",
+      "status": "passed"
+    },
+    {
+      "name": "tf2_echo: defect [0.560, 0.000, 0.760], repair [0.280, 0.000, 0.380]",
+      "status": "passed"
+    },
+    {
+      "name": "view_frames: nine connections before and after; lidar parent corrected",
+      "status": "passed"
+    },
+    {
+      "name": "Late reliable/transient_local echo exit=0; reliable/volatile echo exit=124",
+      "status": "passed"
+    },
+    {
+      "name": "RViz visual inspection: robot visible, Global Status: Ok",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "Модель извлечена из отдельного коммита дефекта 1823921ee0c824a2b1ff28a973260e7bbe9a6e18. Parent lidar_joint равен camera_link, offset оставлен 0.28 0 0.38. Неизменённый test_sensor_contract[lidar] падает с exit=1, tf2_echo показывает 0.56 0 0.76; check_urdf возвращает 0. Команды и вывод: model-check.txt.",
+    "root_cause": "Положение лидара ошибочно задано относительно камеры. Смещение base_link->camera_link складывается с camera_link->lidar_link. Структурная корректность URDF не доказывает правильность геометрии.",
+    "proof_after": "В рабочем Xacro восстановлен parent base_link при прежнем offset. Тот же сенсорный тест проходит, полный pytest даёт 8 passed; tf2_echo показывает 0.28 0 0.38, view_frames содержит правильного родителя, сборка и colcon-тесты проходят. Реальные результаты: model-check.txt."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 3
+  },
+  "ai_used": true
+}
