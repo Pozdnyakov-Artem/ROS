@@ -1,0 +1,761 @@
+PR07. Фактические проверки в существующем контейнере practical_hofstadter.
+Рабочий каталог: /workspaces/ros (C:\5sem\ros на хосте).
+ROS 2 Jazzy, Gazebo Harmonic 8.11.0; ROS_DOMAIN_ID=137, GZ_PARTITION=pr07.
+По выбору пользователя используется Jazzy вместо нормативной Lyrical/Jetty.
+Headless-процессы запущены с DISPLAY пустым и LIBGL_ALWAYS_SOFTWARE=1.
+Ни одного коммита или git add агент не выполнял.
+
+Ниже выбраны рабочие интервалы дефектного и исправного запусков, до их
+намеренной остановки, и полный последний опыт штатного завершения launch.
+Полный вывод вспомогательных попыток хранится локально вне сдачи.
+
+PR07 phase: broken
+COMMAND: ros2 launch course_simulation simulation.launch.py world:=/workspaces/ros/src/course_simulation/worlds/mcity-minimal.sdf bridge_config:=/tmp/pr07-bridge-broken.yaml headless:=true
+[INFO] [launch]: All log files can be found below /home/ros/.ros/log/2026-10-25-19-45-44-145462-77e102b88c20-27841
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gz-1]: process started with pid [27861]
+[INFO] [robot_state_publisher-2]: process started with pid [27862]
+[INFO] [parameter_bridge-3]: process started with pid [27863]
+[INFO] [drive_adapter-4]: process started with pid [27864]
+[INFO] [odom_adapter-5]: process started with pid [27865]
+[robot_state_publisher-2] [WARN] [1792957545.941633503] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[robot_state_publisher-2] [INFO] [1792957545.941958337] [simulation.robot_state_publisher]: Robot initialized
+[parameter_bridge-3] [INFO] [1792957546.891445825] [simulation.bridge]: Creating ROS->GZ Bridge: [/vehicle/gz_cmd_vel (geometry_msgs/msg/Twist) -> /model/course_ackermann/cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792957546.915749488] [simulation.bridge]: Creating GZ->ROS Bridge: [/model/course_ackermann/odometry (gz.msgs.Odometry) -> /vehicle/odom_gz (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792957546.935827471] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/scan (gz.msgs.LaserScan) -> /vehicle/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792957546.946618352] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/imu_typo (gz.msgs.IMU) -> /vehicle/imu (sensor_msgs/msg/Imu)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792957546.950215855] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/camera/image_raw (gz.msgs.Image) -> /vehicle/camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792957546.953199630] [simulation.bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L87]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/gz_frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L88]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L99]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/gz_frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L100]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/gz_frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+PR07 phase: fixed
+COMMAND: ros2 launch course_simulation simulation.launch.py world:=/workspaces/ros/src/course_simulation/worlds/mcity-minimal.sdf bridge_config:=/workspaces/ros/src/course_simulation/config/bridge.yaml headless:=true
+[INFO] [launch]: All log files can be found below /home/ros/.ros/log/2026-10-25-19-47-33-898421-77e102b88c20-28470
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gz-1]: process started with pid [28518]
+[INFO] [robot_state_publisher-2]: process started with pid [28519]
+[INFO] [parameter_bridge-3]: process started with pid [28520]
+[INFO] [drive_adapter-4]: process started with pid [28521]
+[INFO] [odom_adapter-5]: process started with pid [28522]
+[robot_state_publisher-2] [WARN] [1792957655.788904883] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[robot_state_publisher-2] [INFO] [1792957655.789237999] [simulation.robot_state_publisher]: Robot initialized
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L87]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/gz_frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L88]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L99]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/gz_frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L100]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/gz_frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[parameter_bridge-3] [INFO] [1792957656.614960413] [simulation.bridge]: Creating ROS->GZ Bridge: [/vehicle/gz_cmd_vel (geometry_msgs/msg/Twist) -> /model/course_ackermann/cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792957656.622143504] [simulation.bridge]: Creating GZ->ROS Bridge: [/model/course_ackermann/odometry (gz.msgs.Odometry) -> /vehicle/odom_gz (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792957656.628214810] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/scan (gz.msgs.LaserScan) -> /vehicle/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792957656.634104082] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/imu (gz.msgs.IMU) -> /vehicle/imu (sensor_msgs/msg/Imu)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792957656.636559551] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/camera/image_raw (gz.msgs.Image) -> /vehicle/camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792957656.638844374] [simulation.bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792957684.880710209] [simulation.bridge]: Passing message from ROS geometry_msgs/msg/Twist to Gazebo gz.msgs.Twist (showing msg only once per type)
+[drive_adapter-4] [WARN] [1792957703.414070345] [simulation.drive_adapter]: Rejected command: stale_command; publishing zero Twist
+[drive_adapter-4] [WARN] [1792957703.717962004] [simulation.drive_adapter]: Rejected command: non_finite; publishing zero Twist
+[drive_adapter-4] [WARN] [1792957777.463001083] [simulation.drive_adapter]: Rejected command: stale_command; publishing zero Twist
+PR07 phase: final-lifecycle
+COMMAND: ros2 launch course_simulation simulation.launch.py world:=/workspaces/ros/src/course_simulation/worlds/mcity-minimal.sdf bridge_config:=/workspaces/ros/src/course_simulation/config/bridge.yaml headless:=true
+[INFO] [launch]: All log files can be found below /home/ros/.ros/log/2026-10-25-19-57-59-537772-77e102b88c20-31109
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gz-1]: process started with pid [31148]
+[INFO] [robot_state_publisher-2]: process started with pid [31149]
+[INFO] [parameter_bridge-3]: process started with pid [31150]
+[INFO] [drive_adapter-4]: process started with pid [31151]
+[INFO] [odom_adapter-5]: process started with pid [31152]
+[robot_state_publisher-2] [WARN] [1792958281.375617353] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[robot_state_publisher-2] [INFO] [1792958281.376082002] [simulation.robot_state_publisher]: Robot initialized
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L87]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/gz_frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L88]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L99]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/gz_frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L100]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/gz_frame_id:/workspaces/ros/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[parameter_bridge-3] [INFO] [1792958282.534556309] [simulation.bridge]: Creating ROS->GZ Bridge: [/vehicle/gz_cmd_vel (geometry_msgs/msg/Twist) -> /model/course_ackermann/cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792958282.575993312] [simulation.bridge]: Creating GZ->ROS Bridge: [/model/course_ackermann/odometry (gz.msgs.Odometry) -> /vehicle/odom_gz (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792958282.585066455] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/scan (gz.msgs.LaserScan) -> /vehicle/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792958282.592441223] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/imu (gz.msgs.IMU) -> /vehicle/imu (sensor_msgs/msg/Imu)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792958282.596138378] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/camera/image_raw (gz.msgs.Image) -> /vehicle/camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792958282.599737814] [simulation.bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1792958288.698340887] [simulation.bridge]: Passing message from ROS geometry_msgs/msg/Twist to Gazebo gz.msgs.Twist (showing msg only once per type)
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [odom_adapter-5]: sending signal 'SIGINT' to process[odom_adapter-5]
+[INFO] [drive_adapter-4]: sending signal 'SIGINT' to process[drive_adapter-4]
+[INFO] [parameter_bridge-3]: sending signal 'SIGINT' to process[parameter_bridge-3]
+[INFO] [robot_state_publisher-2]: sending signal 'SIGINT' to process[robot_state_publisher-2]
+[INFO] [gz-1]: sending signal 'SIGINT' to process[gz-1]
+[parameter_bridge-3] [INFO] [1792958294.566229924] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[robot_state_publisher-2] [INFO] [1792958294.570332056] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [parameter_bridge-3]: process has finished cleanly [pid 31150]
+[INFO] [robot_state_publisher-2]: process has finished cleanly [pid 31149]
+[INFO] [drive_adapter-4]: process has finished cleanly [pid 31151]
+[INFO] [odom_adapter-5]: process has finished cleanly [pid 31152]
+[INFO] [gz-1]: process has finished cleanly [pid 31148]
+
+
+Сборка и проверка загрузки Ackermann type support
+Ackermann serialization OK
+Starting >>> course_description
+Finished <<< course_description [4.65s]
+Starting >>> course_simulation
+Finished <<< course_simulation [15.0s]
+
+Summary: 2 packages finished [21.7s]
+
+Тесты, Xacro/URDF и SDF. Запущены 47 тестов нового пакета и 8 тестов description; общий test-result также видит старые результаты других пакетов.
+Starting >>> course_description
+UpdateCTestConfiguration  from :/workspaces/ros/build/course_description/CTestConfiguration.ini
+Parse Config file:/workspaces/ros/build/course_description/CTestConfiguration.ini
+   Site: 77e102b88c20
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20261025-1945 - Experimental
+UpdateCTestConfiguration  from :/workspaces/ros/build/course_description/CTestConfiguration.ini
+Parse Config file:/workspaces/ros/build/course_description/CTestConfiguration.ini
+Test project /workspaces/ros/build/course_description
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: description
+
+1: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/workspaces/ros/build/course_description/test_results/course_description/description.xunit.xml" "--package-name" "course_description" "--output-file" "/workspaces/ros/build/course_description/ament_cmake_pytest/description.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/workspaces/ros/src/course_description/test/test_description.py" "-o" "cache_dir=/workspaces/ros/build/course_description/ament_cmake_pytest/description/.cache" "--junit-xml=/workspaces/ros/build/course_description/test_results/course_description/description.xunit.xml" "--junit-prefix=course_description"
+1: Working Directory: /workspaces/ros/build/course_description
+1: Test timeout computed to be: 60
+1: -- run_test.py: invoking following command in '/workspaces/ros/build/course_description':
+1:  - /usr/bin/python3 -u -m pytest /workspaces/ros/src/course_description/test/test_description.py -o cache_dir=/workspaces/ros/build/course_description/ament_cmake_pytest/description/.cache --junit-xml=/workspaces/ros/build/course_description/test_results/course_description/description.xunit.xml --junit-prefix=course_description
+1: ============================= test session starts ==============================
+1: platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+1: cachedir: build/course_description/ament_cmake_pytest/description/.cache
+1: rootdir: /workspaces/ros
+1: plugins: launch-testing-3.4.11, ament-xmllint-0.17.5, ament-lint-0.17.5, launch-testing-ros-0.26.12, ament-flake8-0.17.5, ament-copyright-0.17.5, ament-pep257-0.17.5, ament-black-0.2.6, ament-mypy-0.17.5, colcon-core-0.21.0
+1: collected 8 items
+1: 
+1: ../../src/course_description/test/test_description.py ........           [100%]
+1: 
+1: - generated xml file: /workspaces/ros/build/course_description/test_results/course_description/description.xunit.xml -
+1: ============================== 8 passed in 0.93s ===============================
+1: -- run_test.py: return code 0
+1: -- run_test.py: verify result file '/workspaces/ros/build/course_description/test_results/course_description/description.xunit.xml'
+1/1 Test #1: description ......................   Passed    9.41 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Label Time Summary:
+pytest    =   9.41 sec*proc (1 test)
+
+Total Test time (real) =   9.46 sec
+Finished <<< course_description [10.2s]
+Starting >>> course_simulation
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+cachedir: /workspaces/ros/build/course_simulation/.pytest_cache
+rootdir: /workspaces/ros/src/course_simulation
+configfile: setup.cfg
+testpaths: test
+plugins: launch-testing-3.4.11, ament-xmllint-0.17.5, ament-lint-0.17.5, launch-testing-ros-0.26.12, ament-flake8-0.17.5, ament-copyright-0.17.5, ament-pep257-0.17.5, ament-black-0.2.6, ament-mypy-0.17.5, colcon-core-0.21.0
+collected 47 items
+
+test/test_drive_adapter.py .........................                     [ 53%]
+test/test_odom_adapter.py ......................                         [100%]
+
+---- generated xml file: /workspaces/ros/build/course_simulation/pytest.xml ----
+============================== 47 passed in 3.56s ==============================
+Finished <<< course_simulation [15.6s]
+
+Summary: 2 packages finished [29.6s]
+Summary: 101 tests, 0 errors, 0 failures, 3 skipped
+robot name is: course_ackermann
+---------- Successfully Parsed XML ---------------
+root Link: base_link has 7 child(ren)
+    child(1):  camera_link
+    child(2):  front_left_knuckle
+        child(1):  front_left_wheel
+    child(3):  front_right_knuckle
+        child(1):  front_right_wheel
+    child(4):  imu_link
+    child(5):  lidar_link
+    child(6):  rear_left_wheel
+    child(7):  rear_right_wheel
+Warning [Utils.cc:132] [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/frame_id:/workspaces/ros/src/course_simulation/models/course_ackermann/model.sdf:L87]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+Warning [Utils.cc:132] [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/gz_frame_id:/workspaces/ros/src/course_simulation/models/course_ackermann/model.sdf:L88]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+Warning [Utils.cc:132] [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/frame_id:/workspaces/ros/src/course_simulation/models/course_ackermann/model.sdf:L99]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+Warning [Utils.cc:132] [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/gz_frame_id:/workspaces/ros/src/course_simulation/models/course_ackermann/model.sdf:L100]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+Warning [Utils.cc:132] [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/frame_id:/workspaces/ros/src/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+Warning [Utils.cc:132] [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/gz_frame_id:/workspaces/ros/src/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+Warning [Utils.cc:132] [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/frame_id:/workspaces/ros/src/course_simulation/models/course_ackermann/model.sdf:L87]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+Warning [Utils.cc:132] [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/gz_frame_id:/workspaces/ros/src/course_simulation/models/course_ackermann/model.sdf:L88]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+Warning [Utils.cc:132] [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/frame_id:/workspaces/ros/src/course_simulation/models/course_ackermann/model.sdf:L99]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+Warning [Utils.cc:132] [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/gz_frame_id:/workspaces/ros/src/course_simulation/models/course_ackermann/model.sdf:L100]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+Warning [Utils.cc:132] [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/frame_id:/workspaces/ros/src/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[frame_id], child of element[sensor], not defined in SDF. Copying[frame_id] as children of [sensor].
+Warning [Utils.cc:132] [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/gz_frame_id:/workspaces/ros/src/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+Valid.
+
+Дефект: ros2 topic info -v /vehicle/imu; timeout 5s ros2 topic echo /vehicle/imu --once; gz topic -i/-e /vehicle/imu. Из потока Gazebo показано первое сообщение.
+Type: sensor_msgs/msg/Imu
+
+Publisher count: 1
+
+Node name: bridge
+Node namespace: /simulation
+Topic type: sensor_msgs/msg/Imu
+Topic type hash: RIHS01_7d9a00ff131080897a5ec7e26e315954b8eae3353c3f995c55faf71574000b5b
+Endpoint type: PUBLISHER
+GID: 01.0f.eb.7d.d7.6c.c1.39.00.00.00.00.00.00.18.03
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): UNKNOWN
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Subscription count: 0
+
+imu_echo_exit=124
+Publishers [Address, Message Type]:
+  tcp://172.17.0.2:39137, gz.msgs.IMU
+No subscribers on topic [/vehicle/imu]
+header {
+  stamp {
+    sec: 32
+    nsec: 200000000
+  }
+  data {
+    key: "frame_id"
+    value: "imu_link"
+  }
+  data {
+    key: "seq"
+    value: "1"
+  }
+}
+entity_name: "course_ackermann::imu_link::imu"
+orientation {
+  x: 3.960700674211426e-10
+  y: 1.0018658296386046e-10
+  z: -1.862372160414469e-13
+  w: 1
+}
+orientation_covariance {
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+}
+angular_velocity {
+  x: 3.166739545090622e-13
+  y: 9.7542266537631562e-13
+  z: 3.761708710860758e-19
+}
+angular_velocity_covariance {
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+}
+linear_acceleration {
+  x: -1.3346654396980231e-09
+  y: 7.215789995582556e-09
+  z: 9.81000000076677
+}
+linear_acceleration_covariance {
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+}
+
+Исправленный IMU и участники обмена команды
+header:
+  stamp:
+    sec: 38
+    nanosec: 730000000
+  frame_id: imu_link
+orientation:
+  x: 4.335796207357301e-09
+  y: 4.771333852523171e-10
+  z: 0.09457333881813844
+  w: 0.9955178971695032
+orientation_covariance:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+angular_velocity:
+  x: -2.069701674413972e-12
+  y: 1.261783340506225e-13
+  z: -3.6302094315922016e-10
+angular_velocity_covariance:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+linear_acceleration:
+  x: -3.283546755711312e-09
+  y: 8.887447015751995e-08
+  z: 9.809999999703619
+linear_acceleration_covariance:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+---
+Type: geometry_msgs/msg/Twist
+
+Publisher count: 1
+
+Node name: drive_adapter
+Node namespace: /simulation
+Topic type: geometry_msgs/msg/Twist
+Topic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a
+Endpoint type: PUBLISHER
+GID: 01.0f.eb.7d.69.6f.d3.c5.00.00.00.00.00.00.14.03
+QoS profile:
+  Reliability: RELIABLE
+  History (Depth): UNKNOWN
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Subscription count: 1
+
+Node name: bridge
+Node namespace: /simulation
+Topic type: geometry_msgs/msg/Twist
+Topic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.eb.7d.68.6f.a9.11.00.00.00.00.00.00.15.04
+QoS profile:
+  Reliability: RELIABLE
+  History (Depth): UNKNOWN
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Publishers [Address, Message Type]:
+  tcp://172.17.0.2:38771, gz.msgs.Twist
+Subscribers [Address, Message Type]:
+  tcp://172.17.0.2:43043, gz.msgs.Twist
+  tcp://172.17.0.2:38905, google.protobuf.Message
+
+Живые сообщения: проверка времени, QoS, frames, сохранения payload и отказов
+{
+  "mode": "healthy",
+  "counts": {
+    "/clock": 13495,
+    "/vehicle/scan": 139,
+    "/vehicle/imu": 1386,
+    "/vehicle/odom_gz": 693,
+    "/vehicle/odom": 693,
+    "/tf": 692,
+    "matching_raw_normal_tf": 692,
+    "/tf_static": 1,
+    "/vehicle/gz_cmd_vel": 354,
+    "/vehicle/camera/image_raw": 132
+  },
+  "meta": {
+    "/vehicle/scan": {
+      "frame_id": "lidar_link",
+      "last_stamp_ns": 31900000000
+    },
+    "/vehicle/imu": {
+      "frame_id": "imu_link",
+      "last_stamp_ns": 31990000000
+    },
+    "/vehicle/odom_gz": {
+      "frame_id": "course_ackermann/odom",
+      "last_stamp_ns": 31980000000,
+      "child_frame_id": "course_ackermann/base_link"
+    },
+    "/vehicle/odom": {
+      "frame_id": "odom",
+      "last_stamp_ns": 31980000000,
+      "child_frame_id": "base_link"
+    },
+    "first_position": [
+      -4.77621637710875e-16,
+      8.605055313916126e-41,
+      0.0
+    ],
+    "/vehicle/camera/image_raw": {
+      "frame_id": "camera_link",
+      "last_stamp_ns": 31900000000
+    }
+  },
+  "rates": {
+    "/vehicle/scan": {
+      "messages": 139,
+      "wall_hz": 6.885112493383678,
+      "sim_hz": 10.0,
+      "stamp_monotonic": true
+    },
+    "/vehicle/imu": {
+      "messages": 1386,
+      "wall_hz": 68.8715592051629,
+      "sim_hz": 100.0,
+      "stamp_monotonic": true
+    },
+    "/vehicle/odom_gz": {
+      "messages": 693,
+      "wall_hz": 34.43028071359012,
+      "sim_hz": 50.0,
+      "stamp_monotonic": true
+    },
+    "/vehicle/odom": {
+      "messages": 693,
+      "wall_hz": 34.42836980475048,
+      "sim_hz": 50.0,
+      "stamp_monotonic": true
+    },
+    "/vehicle/camera/image_raw": {
+      "messages": 132,
+      "wall_hz": 6.618863682016822,
+      "sim_hz": 9.632352941176471,
+      "stamp_monotonic": true
+    }
+  },
+  "real_time_factor": 0.6873019264990622,
+  "odom_displacement_m": 2.7889956210574676,
+  "final_position": [
+    2.7876045268029284,
+    0.08807710500207973,
+    0.0
+  ],
+  "static_parents": {
+    "camera_link": "base_link",
+    "imu_link": "base_link",
+    "lidar_link": "base_link"
+  },
+  "rejection_checks": {
+    "stale": "zero Twist received",
+    "non_finite": "zero Twist received",
+    "raw_bypass": "no Twist produced for /drive/raw"
+  },
+  "tf_publishers": [
+    {
+      "name": "robot_state_publisher",
+      "namespace": "/simulation"
+    },
+    {
+      "name": "odom_adapter",
+      "namespace": "/simulation"
+    }
+  ],
+  "safe_subscribers": [
+    {
+      "name": "drive_adapter",
+      "namespace": "/simulation"
+    }
+  ]
+}
+
+Сопоставление ненулевой команды ROS/Gazebo и реальной физики корпуса/колёс
+{
+  "input_speed": 0.1,
+  "input_steering_angle": 0.2,
+  "ros_twist": {
+    "linear": {
+      "x": 0.10000000149011612,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "angular": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.025338755203997684
+    }
+  },
+  "gz_twist": {
+    "linear": {
+      "x": 0.10000000149011612
+    },
+    "angular": {
+      "z": 0.025338755203997684
+    }
+  },
+  "body_before": {
+    "x": 4.171363558516952,
+    "y": 0.8290639997984012,
+    "z": 0.12000000167586845
+  },
+  "body_after": {
+    "x": 4.429723837117444,
+    "y": 1.0264186593157585,
+    "z": 0.11999999948381136
+  },
+  "body_displacement_m": 0.3251136650338397,
+  "rear_left_rotation_delta_xyzw": [
+    4.348290180700154e-08,
+    0.9520742631761709,
+    1.3969485714027119e-08,
+    0.3058669602908254
+  ],
+  "steering_angles_rad": {
+    "left": 0.20912641046002722,
+    "right": 0.17932999069449895
+  }
+}
+
+ros2 topic hz /vehicle/camera/image_raw (наблюдение ограничено по времени)
+average rate: 6.418
+	min: 0.125s max: 0.308s std dev: 0.05808s window: 8
+average rate: 7.062
+	min: 0.118s max: 0.308s std dev: 0.04369s window: 16
+
+ros2 topic hz /vehicle/scan (наблюдение ограничено по времени)
+average rate: 7.515
+	min: 0.122s max: 0.145s std dev: 0.00742s window: 9
+average rate: 7.457
+	min: 0.122s max: 0.173s std dev: 0.01259s window: 17
+average rate: 7.538
+	min: 0.122s max: 0.173s std dev: 0.01090s window: 25
+
+ros2 topic hz /vehicle/imu (наблюдение ограничено по времени)
+average rate: 74.051
+	min: 0.009s max: 0.028s std dev: 0.00410s window: 75
+average rate: 73.837
+	min: 0.009s max: 0.040s std dev: 0.00476s window: 149
+average rate: 74.857
+	min: 0.008s max: 0.040s std dev: 0.00438s window: 226
+
+ros2 topic hz /vehicle/odom (наблюдение ограничено по времени)
+average rate: 35.961
+	min: 0.020s max: 0.058s std dev: 0.00870s window: 38
+average rate: 37.414
+	min: 0.020s max: 0.058s std dev: 0.00708s window: 78
+
+tf2_echo, список нод и фактическая командная строка headless-сервера
+At time 188.420000000
+- Translation: [4.533, 0.817, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.302, 0.953]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.614]
+- Rotation: in RPY (degree) [0.000, -0.000, 35.195]
+- Matrix:
+  0.817 -0.576  0.000  4.533
+  0.576  0.817  0.000  0.817
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+At time 189.40000000
+- Translation: [4.533, 0.817, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.302, 0.953]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.614]
+- Rotation: in RPY (degree) [0.000, -0.000, 35.195]
+- Matrix:
+  0.817 -0.576  0.000  4.533
+  0.576  0.817  0.000  0.817
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+At time 189.520000000
+- Translation: [4.533, 0.817, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.302, 0.953]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.614]
+- Rotation: in RPY (degree) [0.000, -0.000, 35.195]
+- Matrix:
+  0.817 -0.576  0.000  4.533
+  0.576  0.817  0.000  0.817
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+At time 190.120000000
+- Translation: [4.533, 0.817, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.302, 0.953]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.614]
+- Rotation: in RPY (degree) [0.000, -0.000, 35.195]
+- Matrix:
+  0.817 -0.576  0.000  4.533
+  0.576  0.817  0.000  0.817
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+At time 190.780000000
+- Translation: [4.533, 0.817, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.302, 0.953]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.614]
+- Rotation: in RPY (degree) [0.000, -0.000, 35.195]
+- Matrix:
+  0.817 -0.576  0.000  4.533
+  0.576  0.817  0.000  0.817
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+At time 191.340000000
+- Translation: [4.533, 0.817, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.302, 0.953]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.614]
+- Rotation: in RPY (degree) [0.000, -0.000, 35.195]
+- Matrix:
+  0.817 -0.576  0.000  4.533
+  0.576  0.817  0.000  0.817
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+At time 191.920000000
+- Translation: [4.533, 0.817, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.302, 0.953]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.614]
+- Rotation: in RPY (degree) [0.000, -0.000, 35.195]
+- Matrix:
+  0.817 -0.576  0.000  4.533
+  0.576  0.817  0.000  0.817
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+At time 192.560000000
+- Translation: [4.533, 0.817, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.302, 0.953]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.614]
+- Rotation: in RPY (degree) [0.000, -0.000, 35.195]
+- Matrix:
+  0.817 -0.576  0.000  4.533
+  0.576  0.817  0.000  0.817
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+At time 193.260000000
+- Translation: [4.533, 0.817, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.302, 0.953]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.614]
+- Rotation: in RPY (degree) [0.000, -0.000, 35.195]
+- Matrix:
+  0.817 -0.576  0.000  4.533
+  0.576  0.817  0.000  0.817
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+At time 193.960000000
+- Translation: [4.533, 0.817, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.302, 0.953]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.614]
+- Rotation: in RPY (degree) [0.000, -0.000, 35.195]
+- Matrix:
+  0.817 -0.576  0.000  4.533
+  0.576  0.817  0.000  0.817
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+[INFO] [1792957925.426262109] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+/pr07_recording_clock
+/rosbag2_recorder
+/simulation/bridge
+/simulation/drive_adapter
+/simulation/odom_adapter
+/simulation/robot_state_publisher
+  28518 gz sim -r -s --headless-rendering /workspaces/ros/src/course_simulation/worlds/mcity-minimal.sdf
+  28519 /opt/ros/jazzy/lib/robot_state_publisher/robot_state_publisher --ros-args -r __ns:=/simulation --params-file /tmp/launch_params_9oirn6_j -r tf:=/tf -r tf_static:=/tf_static
+  28520 /opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge --ros-args -r __node:=bridge -r __ns:=/simulation --params-file /tmp/launch_params_v05s_63t
+  28521 /usr/bin/python3 /workspaces/ros/install/course_simulation/lib/course_simulation/drive_adapter --ros-args -r __ns:=/simulation --params-file /tmp/launch_params_e_y1tvtt
+  28522 /usr/bin/python3 /workspaces/ros/install/course_simulation/lib/course_simulation/odom_adapter --ros-args -r __ns:=/simulation --params-file /tmp/launch_params_vfjnlea3
+
+/clock, use_sim_time у обоих адаптеров и robot_state_publisher, окружение сервера
+clock:
+  sec: 271
+  nanosec: 711000000
+---
+Boolean value is: True
+Boolean value is: True
+Boolean value is: True
+GZ_PARTITION=pr07
+DISPLAY=
+LIBGL_ALWAYS_SOFTWARE=1
+
+MCAP recorder, SIGINT после 35 секунд /clock после запуска recorder
+COMMAND: ros2 bag record --storage mcap --use-sim-time -o fixtures/pr07-sensors --topics /vehicle/camera/image_raw /vehicle/scan /vehicle/imu /vehicle/odom /tf /tf_static /clock
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1792957914.456656123] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[INFO] [1792957914.456699500] [rosbag2_recorder]: Event publisher thread: Started
+[INFO] [1792957914.496411030] [rosbag2_recorder]: Starting recording to 'fixtures/pr07-sensors'
+[INFO] [1792957914.591811120] [rosbag2_recorder]: Listening for topics...
+[INFO] [1792957914.591976958] [rosbag2_recorder]: Recording...
+[INFO] [1792957914.593327670] [rosbag2_recorder]: Topics discovery started.
+[INFO] [1792957914.593464395] [rosbag2_recorder]: use_sim_time set, waiting for /clock before starting recording...
+[INFO] [1792957914.593499939] [rosbag2_recorder]: Sim time /clock found, starting recording.
+[INFO] [1792957915.178647486] [rosbag2_recorder]: Subscribed to topic '/clock'
+[INFO] [1792957915.606954661] [rosbag2_recorder]: Subscribed to topic '/tf'
+[INFO] [1792957915.724212337] [rosbag2_recorder]: Subscribed to topic '/vehicle/camera/image_raw'
+[INFO] [1792957915.828124674] [rosbag2_recorder]: Subscribed to topic '/vehicle/imu'
+[INFO] [1792957916.227787670] [rosbag2_recorder]: Subscribed to topic '/vehicle/odom'
+[INFO] [1792957916.377689179] [rosbag2_recorder]: Subscribed to topic '/vehicle/scan'
+[INFO] [1792957916.917616962] [rosbag2_recorder]: Subscribed to topic '/tf_static'
+[INFO] [1792957916.918042175] [rosbag2_recorder]: All requested topics are subscribed. Stopping discovery...
+[INFO] [1792957916.918069522] [rosbag2_recorder]: Topics discovery stopped.
+Clock advanced 35.0 seconds after recorder discovery
+[INFO] [1792957958.884707348] [rosbag2_recorder]: Pausing recording.
+[INFO] [1792957958.884990496] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[INFO] [1792957958.937426478] [rosbag2_recorder]: Recording stopped
+[WARN] [1792957958.937545313] [rosbag2_recorder]: Number of messages lost on the transport layer: 14
+[INFO] [1792957958.951254176] [rosbag2_recorder]: Event publisher thread: Exited
+
+Чтение содержимого MCAP: семь топиков, frames, static TF и совпавшие stamps/poses
+{
+  "duration_s": 30.785,
+  "counts": {
+    "/clock": 30786,
+    "/tf": 1524,
+    "/vehicle/camera/image_raw": 289,
+    "/vehicle/imu": 3034,
+    "/vehicle/odom": 1504,
+    "/vehicle/scan": 300,
+    "/tf_static": 1
+  },
+  "frames": {
+    "/vehicle/camera/image_raw": [
+      "camera_link"
+    ],
+    "/vehicle/imu": [
+      "imu_link"
+    ],
+    "/vehicle/odom": [
+      "odom"
+    ],
+    "/vehicle/scan": [
+      "lidar_link"
+    ]
+  },
+  "static_parents": {
+    "camera_link": "base_link",
+    "imu_link": "base_link",
+    "lidar_link": "base_link"
+  },
+  "matching_odometry_tf_stamps": 1504,
+  "camera": {
+    "width": 640,
+    "height": 360,
+    "encoding": "rgb8"
+  },
+  "all_seven_topics_nonempty": true
+}

@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR07",
+  "commit": "8645a47e0dd9b3e5139ba436294ce5f4086dc470",
+  "course_kit": {
+    "version": "v1-w07",
+    "archive_sha256": "9b7fdd5424d3d97e47d51dbe23064934585e62135dc2902844dd679529bda929"
+  },
+  "environment": {
+    "ubuntu": "24.04",
+    "ros": "jazzy",
+    "gazebo": "Harmonic 8.11.0",
+    "container": "practical_hofstadter",
+    "ros_domain_id": 137,
+    "gz_partition": "pr07",
+    "renderer": "OGRE2/EGL, Mesa llvmpipe, DISPLAY empty"
+  },
+  "commands": [
+    "docker exec -u root practical_hofstadter bash -lc \"apt-get update && apt-get install -y --no-install-recommends ros-jazzy-ackermann-msgs ros-jazzy-rosbag2-storage-mcap\"",
+    "serialize_message(AckermannDriveStamped())",
+    "bash .course-kit/v1/tools/workstation_report.sh",
+    "EGL_PLATFORM=surfaceless eglinfo -B",
+    "colcon build --symlink-install --packages-up-to course_simulation",
+    "colcon test --packages-select course_description course_simulation --event-handlers console_direct+",
+    "colcon test-result --verbose",
+    "xacro src/course_description/urdf/vehicle.urdf.xacro > /tmp/pr07-vehicle.urdf",
+    "check_urdf /tmp/pr07-vehicle.urdf",
+    "gz sdf -k src/course_simulation/models/course_ackermann/model.sdf",
+    "ros2 launch course_simulation simulation.launch.py world:=/workspaces/ros/src/course_simulation/worlds/mcity-minimal.sdf bridge_config:=/tmp/pr07-bridge-broken.yaml headless:=true",
+    "ros2 topic info -v /vehicle/imu",
+    "timeout 5s ros2 topic echo /vehicle/imu --once",
+    "gz topic -i -t /vehicle/imu",
+    "gz topic -e -t /vehicle/imu -n 1",
+    "ros2 launch course_simulation simulation.launch.py world:=/workspaces/ros/src/course_simulation/worlds/mcity-minimal.sdf bridge_config:=/workspaces/ros/src/course_simulation/config/bridge.yaml headless:=true",
+    "ros2 topic echo /clock --once",
+    "ros2 topic echo /vehicle/imu --once",
+    "ros2 topic info -v /vehicle/gz_cmd_vel",
+    "gz topic -i -t /model/course_ackermann/cmd_vel",
+    "gz topic -e -t /model/course_ackermann/cmd_vel -n 1 --json-output",
+    "gz topic -e -t /world/mcity_minimal/dynamic_pose/info -n 1 --json-output",
+    "ros2 topic hz /vehicle/camera/image_raw",
+    "ros2 topic hz /vehicle/scan",
+    "ros2 topic hz /vehicle/imu",
+    "ros2 topic hz /vehicle/odom",
+    "ros2 run tf2_ros tf2_echo odom base_link --ros-args -p use_sim_time:=true",
+    "ros2 bag record --storage mcap --use-sim-time -o fixtures/pr07-sensors --topics /vehicle/camera/image_raw /vehicle/scan /vehicle/imu /vehicle/odom /tf /tf_static /clock",
+    "ros2 bag info fixtures/pr07-sensors",
+    "MCAP read with rosbag2_py: all topics, frames, static transforms, matched odometry/TF stamps and poses",
+    "python .course-kit/v1/tools/check_practice.py PR07 --submission . --json"
+  ],
+  "tests": [
+    {
+      "name": "course_simulation: 47 pytest cases",
+      "status": "passed"
+    },
+    {
+      "name": "course_description: 8 pytest cases",
+      "status": "passed"
+    },
+    {
+      "name": "Ackermann type support serialization, check_urdf and gz sdf -k",
+      "status": "passed"
+    },
+    {
+      "name": "Broken IMU bridge: publisher exists, echo exit=124, source Gazebo IMU is alive",
+      "status": "passed"
+    },
+    {
+      "name": "Fixed IMU, all sensors, simulation stamps, static TF and namespace",
+      "status": "passed"
+    },
+    {
+      "name": "Live stale/NaN commands produce zero; /drive/raw does not produce Twist",
+      "status": "passed"
+    },
+    {
+      "name": "ROS/Gazebo Twist values match; real body and wheel motion verified",
+      "status": "passed"
+    },
+    {
+      "name": "692 matched raw/normalized odometry/TF timestamps and preserved payloads",
+      "status": "passed"
+    },
+    {
+      "name": "MCAP 30.785 simulation seconds; all seven topics nonempty; 1504 matching odometry/TF timestamps",
+      "status": "passed"
+    },
+    {
+      "name": "Final launch lifecycle: all sensors live; Ctrl+C forwarded by launch; all five processes finished cleanly",
+      "status": "passed"
+    },
+    {
+      "name": "check_practice.py PR07 --submission . --json",
+      "status": "failed",
+      "reason": "Only report.commit is missing because no implementation commit was authorized. All other checker validations passed."
+    }
+  ],
+  "defect": {
+    "reproducer": "Copy bridge.yaml to /tmp/pr07-bridge-broken.yaml and change only the IMU entry gz_topic_name from /vehicle/imu to /vehicle/imu_typo; start the single launch with that copy. ros2 topic info -v still reports one BEST_EFFORT publisher, timeout 5s ros2 topic echo /vehicle/imu --once exits 124. Probe sees zero IMU messages while camera, lidar, odometry and /clock are alive.",
+    "root_cause": "The bridge subscribes to a nonexistent Gazebo IMU topic. Matching ROS name and existing publisher do not establish data delivery. gz topic -i/-e show the actual source /vehicle/imu is publishing gz.msgs.IMU with imu_link frame.",
+    "proof_after": "Stop the defective launch, then start the same single launch with corrected bridge.yaml. ros2 topic echo /vehicle/imu --once succeeds; healthy probe receives 1386 IMU messages. Twist values match on ROS/Gazebo transports, odometry changes and real body motion is verified. Evidence is in headless.txt and sensors.json."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true,
+    "headless_verified": true,
+    "recording_verified": true,
+    "odometry_tf_owned": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 3
+  },
+  "ai_used": true
+}

@@ -1,0 +1,312 @@
+{
+  "practice_id": "PR07",
+  "environment": {
+    "ubuntu": "24.04",
+    "ros": "jazzy",
+    "gazebo": "Harmonic 8.11.0",
+    "container": "practical_hofstadter",
+    "ros_domain_id": 137,
+    "gz_partition": "pr07",
+    "renderer": "OGRE2/EGL, Mesa llvmpipe, DISPLAY empty"
+  },
+  "baseline_deviation": "По прямому выбору пользователя используется существующий контейнер Jazzy/Harmonic вместо Lyrical/Jetty из baseline.lock.yaml.",
+  "changed_parameter": {
+    "file": "src/course_simulation/models/course_ackermann/model.sdf",
+    "sensor": "front_camera",
+    "parameter": "update_rate",
+    "before_hz": 20,
+    "after_hz": 10
+  },
+  "namespace": "/simulation",
+  "use_sim_time": true,
+  "real_time_factor_during_probe": 0.6873019264990622,
+  "rate_explanation": "update_rate задаёт частоту по времени симуляции. При программном OGRE2/EGL-рендеринге и RTF около 0.69 стеновые частоты пропорционально ниже. Отдельный ros2 topic hz запускался в другом окне нагрузки, поэтому RTF и его оценки отличаются. Камера best effort дополнительно теряет часть сообщений при нагрузке. Требования точного совпадения wall Hz с update_rate нет.",
+  "qos_note": "ros2 topic info -v подтвердил reliability и durability. Fast DDS сообщает History (Depth): UNKNOWN; keep_last задан профилем SENSOR_DATA и QoSProfile(depth=10) в коде, это ограничение интроспекции не скрывается.",
+  "sensors": [
+    {
+      "topic": "/vehicle/camera/image_raw",
+      "type": "sensor_msgs/msg/Image",
+      "frame_id": "camera_link",
+      "stamp_source": "Gazebo simulation time, bridged through /clock",
+      "declared_hz": 10,
+      "measured_hz_ros2_topic_hz_wall_time": 7.062,
+      "measured_hz_probe_wall_time": 6.618863682016822,
+      "measured_hz_from_header_stamps": 9.632352941176471,
+      "stamps_monotonic": true,
+      "qos": {
+        "reliability": "best_effort",
+        "history_configured": "keep_last",
+        "history_reported_by_topic_info": "UNKNOWN",
+        "durability": "volatile"
+      },
+      "measurement_command": "ros2 topic hz /vehicle/camera/image_raw",
+      "measurement_output": "average rate: 6.418\n\tmin: 0.125s max: 0.308s std dev: 0.05808s window: 8\naverage rate: 7.062\n\tmin: 0.118s max: 0.308s std dev: 0.04369s window: 16\n",
+      "topic_info_verbose": "Type: sensor_msgs/msg/Image\n\nPublisher count: 1\n\nNode name: bridge\nNode namespace: /simulation\nTopic type: sensor_msgs/msg/Image\nTopic type hash: RIHS01_d31d41a9a4c4bc8eae9be757b0beed306564f7526c88ea6a4588fb9582527d47\nEndpoint type: PUBLISHER\nGID: 01.0f.eb.7d.68.6f.a9.11.00.00.00.00.00.00.19.03\nQoS profile:\n  Reliability: BEST_EFFORT\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 0\n\n"
+    },
+    {
+      "topic": "/vehicle/scan",
+      "type": "sensor_msgs/msg/LaserScan",
+      "frame_id": "lidar_link",
+      "stamp_source": "Gazebo simulation time, bridged through /clock",
+      "declared_hz": 10,
+      "measured_hz_ros2_topic_hz_wall_time": 7.538,
+      "measured_hz_probe_wall_time": 6.885112493383678,
+      "measured_hz_from_header_stamps": 10.0,
+      "stamps_monotonic": true,
+      "qos": {
+        "reliability": "best_effort",
+        "history_configured": "keep_last",
+        "history_reported_by_topic_info": "UNKNOWN",
+        "durability": "volatile"
+      },
+      "measurement_command": "ros2 topic hz /vehicle/scan",
+      "measurement_output": "average rate: 7.515\n\tmin: 0.122s max: 0.145s std dev: 0.00742s window: 9\naverage rate: 7.457\n\tmin: 0.122s max: 0.173s std dev: 0.01259s window: 17\naverage rate: 7.538\n\tmin: 0.122s max: 0.173s std dev: 0.01090s window: 25\n",
+      "topic_info_verbose": "Type: sensor_msgs/msg/LaserScan\n\nPublisher count: 1\n\nNode name: bridge\nNode namespace: /simulation\nTopic type: sensor_msgs/msg/LaserScan\nTopic type hash: RIHS01_64c191398013af96509d518dac71d5164f9382553fce5c1f8cca5be7924bd828\nEndpoint type: PUBLISHER\nGID: 01.0f.eb.7d.68.6f.a9.11.00.00.00.00.00.00.17.03\nQoS profile:\n  Reliability: BEST_EFFORT\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 0\n\n"
+    },
+    {
+      "topic": "/vehicle/imu",
+      "type": "sensor_msgs/msg/Imu",
+      "frame_id": "imu_link",
+      "stamp_source": "Gazebo simulation time, bridged through /clock",
+      "declared_hz": 100,
+      "measured_hz_ros2_topic_hz_wall_time": 74.857,
+      "measured_hz_probe_wall_time": 68.8715592051629,
+      "measured_hz_from_header_stamps": 100.0,
+      "stamps_monotonic": true,
+      "qos": {
+        "reliability": "best_effort",
+        "history_configured": "keep_last",
+        "history_reported_by_topic_info": "UNKNOWN",
+        "durability": "volatile"
+      },
+      "measurement_command": "ros2 topic hz /vehicle/imu",
+      "measurement_output": "average rate: 74.051\n\tmin: 0.009s max: 0.028s std dev: 0.00410s window: 75\naverage rate: 73.837\n\tmin: 0.009s max: 0.040s std dev: 0.00476s window: 149\naverage rate: 74.857\n\tmin: 0.008s max: 0.040s std dev: 0.00438s window: 226\n",
+      "topic_info_verbose": "Type: sensor_msgs/msg/Imu\n\nPublisher count: 1\n\nNode name: bridge\nNode namespace: /simulation\nTopic type: sensor_msgs/msg/Imu\nTopic type hash: RIHS01_7d9a00ff131080897a5ec7e26e315954b8eae3353c3f995c55faf71574000b5b\nEndpoint type: PUBLISHER\nGID: 01.0f.eb.7d.68.6f.a9.11.00.00.00.00.00.00.18.03\nQoS profile:\n  Reliability: BEST_EFFORT\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 0\n\n"
+    },
+    {
+      "topic": "/vehicle/odom",
+      "type": "nav_msgs/msg/Odometry",
+      "frame_id": "odom",
+      "stamp_source": "Gazebo simulation time, bridged through /clock",
+      "declared_hz": 50,
+      "measured_hz_ros2_topic_hz_wall_time": 37.414,
+      "measured_hz_probe_wall_time": 34.42836980475048,
+      "measured_hz_from_header_stamps": 50.0,
+      "stamps_monotonic": true,
+      "qos": {
+        "reliability": "reliable",
+        "history_configured": "keep_last",
+        "history_reported_by_topic_info": "UNKNOWN",
+        "durability": "volatile"
+      },
+      "measurement_command": "ros2 topic hz /vehicle/odom",
+      "measurement_output": "average rate: 35.961\n\tmin: 0.020s max: 0.058s std dev: 0.00870s window: 38\naverage rate: 37.414\n\tmin: 0.020s max: 0.058s std dev: 0.00708s window: 78\n",
+      "topic_info_verbose": "Type: nav_msgs/msg/Odometry\n\nPublisher count: 1\n\nNode name: odom_adapter\nNode namespace: /simulation\nTopic type: nav_msgs/msg/Odometry\nTopic type hash: RIHS01_3cc97dc7fb7502f8714462c526d369e35b603cfc34d946e3f2eda2766dfec6e0\nEndpoint type: PUBLISHER\nGID: 01.0f.eb.7d.6a.6f.25.52.00.00.00.00.00.00.14.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 0\n\n",
+      "child_frame_id": "base_link",
+      "source_topic": "/vehicle/odom_gz",
+      "source_frame_id": "course_ackermann/odom",
+      "source_child_frame_id": "course_ackermann/base_link"
+    }
+  ],
+  "source_odometry_frames": {
+    "header.frame_id": "course_ackermann/odom",
+    "child_frame_id": "course_ackermann/base_link"
+  },
+  "normalized_odometry_frames": {
+    "header.frame_id": "odom",
+    "child_frame_id": "base_link"
+  },
+  "runtime_checks": {
+    "mode": "healthy",
+    "counts": {
+      "/clock": 13495,
+      "/vehicle/scan": 139,
+      "/vehicle/imu": 1386,
+      "/vehicle/odom_gz": 693,
+      "/vehicle/odom": 693,
+      "/tf": 692,
+      "matching_raw_normal_tf": 692,
+      "/tf_static": 1,
+      "/vehicle/gz_cmd_vel": 354,
+      "/vehicle/camera/image_raw": 132
+    },
+    "meta": {
+      "/vehicle/scan": {
+        "frame_id": "lidar_link",
+        "last_stamp_ns": 31900000000
+      },
+      "/vehicle/imu": {
+        "frame_id": "imu_link",
+        "last_stamp_ns": 31990000000
+      },
+      "/vehicle/odom_gz": {
+        "frame_id": "course_ackermann/odom",
+        "last_stamp_ns": 31980000000,
+        "child_frame_id": "course_ackermann/base_link"
+      },
+      "/vehicle/odom": {
+        "frame_id": "odom",
+        "last_stamp_ns": 31980000000,
+        "child_frame_id": "base_link"
+      },
+      "first_position": [
+        -4.77621637710875e-16,
+        8.605055313916126e-41,
+        0.0
+      ],
+      "/vehicle/camera/image_raw": {
+        "frame_id": "camera_link",
+        "last_stamp_ns": 31900000000
+      }
+    },
+    "rates": {
+      "/vehicle/scan": {
+        "messages": 139,
+        "wall_hz": 6.885112493383678,
+        "sim_hz": 10.0,
+        "stamp_monotonic": true
+      },
+      "/vehicle/imu": {
+        "messages": 1386,
+        "wall_hz": 68.8715592051629,
+        "sim_hz": 100.0,
+        "stamp_monotonic": true
+      },
+      "/vehicle/odom_gz": {
+        "messages": 693,
+        "wall_hz": 34.43028071359012,
+        "sim_hz": 50.0,
+        "stamp_monotonic": true
+      },
+      "/vehicle/odom": {
+        "messages": 693,
+        "wall_hz": 34.42836980475048,
+        "sim_hz": 50.0,
+        "stamp_monotonic": true
+      },
+      "/vehicle/camera/image_raw": {
+        "messages": 132,
+        "wall_hz": 6.618863682016822,
+        "sim_hz": 9.632352941176471,
+        "stamp_monotonic": true
+      }
+    },
+    "real_time_factor": 0.6873019264990622,
+    "odom_displacement_m": 2.7889956210574676,
+    "final_position": [
+      2.7876045268029284,
+      0.08807710500207973,
+      0.0
+    ],
+    "static_parents": {
+      "camera_link": "base_link",
+      "imu_link": "base_link",
+      "lidar_link": "base_link"
+    },
+    "rejection_checks": {
+      "stale": "zero Twist received",
+      "non_finite": "zero Twist received",
+      "raw_bypass": "no Twist produced for /drive/raw"
+    },
+    "tf_publishers": [
+      {
+        "name": "robot_state_publisher",
+        "namespace": "/simulation"
+      },
+      {
+        "name": "odom_adapter",
+        "namespace": "/simulation"
+      }
+    ],
+    "safe_subscribers": [
+      {
+        "name": "drive_adapter",
+        "namespace": "/simulation"
+      }
+    ]
+  },
+  "command_and_physics_proof": {
+    "input_speed": 0.1,
+    "input_steering_angle": 0.2,
+    "ros_twist": {
+      "linear": {
+        "x": 0.10000000149011612,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "angular": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.025338755203997684
+      }
+    },
+    "gz_twist": {
+      "linear": {
+        "x": 0.10000000149011612
+      },
+      "angular": {
+        "z": 0.025338755203997684
+      }
+    },
+    "body_before": {
+      "x": 4.171363558516952,
+      "y": 0.8290639997984012,
+      "z": 0.12000000167586845
+    },
+    "body_after": {
+      "x": 4.429723837117444,
+      "y": 1.0264186593157585,
+      "z": 0.11999999948381136
+    },
+    "body_displacement_m": 0.3251136650338397,
+    "rear_left_rotation_delta_xyzw": [
+      4.348290180700154e-08,
+      0.9520742631761709,
+      1.3969485714027119e-08,
+      0.3058669602908254
+    ],
+    "steering_angles_rad": {
+      "left": 0.20912641046002722,
+      "right": 0.17932999069449895
+    }
+  },
+  "bag_validation": {
+    "duration_s": 30.785,
+    "counts": {
+      "/clock": 30786,
+      "/tf": 1524,
+      "/vehicle/camera/image_raw": 289,
+      "/vehicle/imu": 3034,
+      "/vehicle/odom": 1504,
+      "/vehicle/scan": 300,
+      "/tf_static": 1
+    },
+    "frames": {
+      "/vehicle/camera/image_raw": [
+        "camera_link"
+      ],
+      "/vehicle/imu": [
+        "imu_link"
+      ],
+      "/vehicle/odom": [
+        "odom"
+      ],
+      "/vehicle/scan": [
+        "lidar_link"
+      ]
+    },
+    "static_parents": {
+      "camera_link": "base_link",
+      "imu_link": "base_link",
+      "lidar_link": "base_link"
+    },
+    "matching_odometry_tf_stamps": 1504,
+    "camera": {
+      "width": 640,
+      "height": 360,
+      "encoding": "rgb8"
+    },
+    "all_seven_topics_nonempty": true
+  },
+  "recording_transport_messages_lost_reported": 14
+}

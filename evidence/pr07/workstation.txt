@@ -1,0 +1,67 @@
+
+== Система ==
+PRETTY_NAME="Ubuntu 24.04.4 LTS"
+VERSION_CODENAME=noble
+архитектура=x86_64
+ядро=6.6.87.2-microsoft-standard-WSL2
+назначенная оболочка=/bin/bash
+текущая оболочка=bash
+
+== Инструменты ==
+GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
+Copyright (C) 2022 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+git version 2.43.0
+fish, version 3.7.0
+uv 0.12.15 (x86_64-unknown-linux-gnu)
+[не найдено] code
+[не найдено] docker
+
+== ROS 2 ==
+ROS_DISTRO=jazzy
+ROS_DOMAIN_ID=137
+ros2=/opt/ros/jazzy/bin/ros2
+/opt/ros/jazzy
+
+== Графические адаптеры и драйверы ==
+53d3:00:00.0 3D controller [0302]: Microsoft Corporation Basic Render Driver [1414:008e]
+	Kernel driver in use: dxgkrnl
+5582:00:00.0 SCSI storage controller [0100]: Red Hat, Inc. Virtio 1.0 console [1af4:1043] (rev 01)
+	Subsystem: Red Hat, Inc. Device [1af4:0040]
+
+== OpenGL renderer ==
+direct rendering: Yes
+OpenGL vendor string: Mesa
+OpenGL renderer string: llvmpipe (LLVM 20.1.2, 256 bits)
+OpenGL version string: 4.5 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2
+
+== Vulkan ==
+ERROR: [Loader Message] Code 0 : vkCreateInstance: Found no drivers!
+Cannot create Vulkan instance.
+This problem is often caused by a faulty installation of the Vulkan driver or attempting to use a GPU that does not support Vulkan.
+ERROR at ./vulkaninfo/./vulkaninfo.h:458:vkCreateInstance failed with ERROR_INCOMPATIBLE_DRIVER
+
+== NVIDIA ==
+[не найдено] nvidia-smi; это нормально для Intel/AMD-only системы
+
+Отчёт завершён. Перед публикацией просмотрите его вручную.
+
+Selected renderer verification: Surfaceless EGL, software llvmpipe. Vulkan is not used.
+
+EGL API version: 1.5
+EGL vendor string: Mesa Project
+EGL version string: 1.5
+EGL client APIs: OpenGL OpenGL_ES 
+OpenGL core profile vendor: Mesa
+OpenGL core profile renderer: llvmpipe (LLVM 20.1.2, 256 bits)
+OpenGL core profile version: 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2
+OpenGL core profile shading language version: 4.50
+OpenGL compatibility profile vendor: Mesa
+OpenGL compatibility profile renderer: llvmpipe (LLVM 20.1.2, 256 bits)
+OpenGL compatibility profile version: 4.5 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2
+OpenGL compatibility profile shading language version: 4.50
+OpenGL ES profile vendor: Mesa
+OpenGL ES profile renderer: llvmpipe (LLVM 20.1.2, 256 bits)
+OpenGL ES profile version: OpenGL ES 3.2 Mesa 25.2.8-0ubuntu0.24.04.2
+OpenGL ES profile shading language version: OpenGL ES GLSL ES 3.20
+
