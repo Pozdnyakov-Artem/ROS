@@ -316,3 +316,129 @@ ros2 topic pub -r 10 /joint_states sensor_msgs/msg/JointState \
 ```bash
 python3 .course-kit/v1/tools/check_practice.py PR06 --submission .
 ```
+
+## Практическая работа ПР07
+
+Пакет `course_simulation` запускает мир `mcity-minimal.sdf`, одного робота,
+мост `ros_gz`, описание из ПР06 и адаптеры команд и одометрии.
+Ноды работают в `/simulation`, контрактные имена топиков сохранены.
+
+### Сборка и проверки
+
+В Bash контейнера, из корня workspace `/workspaces/ros`:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+export ROS_DOMAIN_ID=16
+colcon build --symlink-install --packages-up-to course_simulation
+source install/setup.bash
+colcon test --packages-select course_description course_simulation --event-handlers console_direct+
+colcon test-result --verbose
+gz sdf -k src/course_simulation/models/course_ackermann/model.sdf
+```
+
+### Запуск симуляции
+
+Во всех терминалах подключить ROS и `install/setup.bash`, установить
+одинаковые домен ROS и раздел Gazebo:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
+export ROS_DOMAIN_ID=16
+export GZ_PARTITION=pr07
+```
+
+В первом терминале из корня workspace:
+
+```bash
+mkdir -p evidence/pr07 fixtures
+export DISPLAY=
+export GZ_SIM_RESOURCE_PATH="$PWD/src/course_simulation/models${GZ_SIM_RESOURCE_PATH:+:$GZ_SIM_RESOURCE_PATH}"
+ros2 launch course_simulation simulation.launch.py \
+  world:=$PWD/src/course_simulation/worlds/mcity-minimal.sdf \
+  bridge_config:=$PWD/src/course_simulation/config/bridge.yaml \
+  headless:=true 2>&1 | tee evidence/pr07/headless.txt
+```
+
+Gazebo запускается без окна с `-s -r --headless-rendering`; камера и лидар
+используют OGRE2/EGL. Мир уже содержит робота. Первый терминал оставить
+работающим до завершения проверок, затем остановить через `Ctrl+C`.
+
+### Проверка топиков и команды
+
+Во втором терминале с тем же окружением:
+
+```bash
+ros2 topic echo /clock rosgraph_msgs/msg/Clock --once
+ros2 topic info -v /vehicle/imu
+ros2 topic hz /vehicle/scan
+```
+
+```bash
+ros2 topic pub --use-sim-time -r 20 /drive/safe \
+  ackermann_msgs/msg/AckermannDriveStamped \
+  '{header: auto, drive: {speed: 0.1, steering_angle: 0.2}}'
+```
+
+Пока источник работает, проверить путь команды и ответ модели:
+
+```bash
+ros2 topic echo /vehicle/gz_cmd_vel --once
+gz topic -i -t /model/course_ackermann/cmd_vel
+timeout 3s gz topic -e -t /model/course_ackermann/cmd_vel
+ros2 topic echo /vehicle/odom --once
+ros2 run tf2_ros tf2_echo odom base_link --ros-args -p use_sim_time:=true
+```
+
+ROS и Gazebo получают `linear.x` около 0.1 м/с и `angular.z` около
+0.02534 рад/с. Положение в одометрии меняется, TF показывает ту же позу.
+Физическое движение корпуса и колёс проверяется через
+`/world/mcity_minimal/dynamic_pose/info` командой `gz topic -e -t`.
+После опыта остановить источник и передать нулевую команду:
+
+```bash
+ros2 topic pub --use-sim-time --once /drive/safe \
+  ackermann_msgs/msg/AckermannDriveStamped \
+  '{header: auto, drive: {speed: 0.0, steering_angle: 0.0}}'
+```
+
+### Дефект и результаты
+
+В копии YAML исходный Gazebo-топик IMU заменён на `/vehicle/imu_typo`.
+`ros2 topic info -v /vehicle/imu` показывает издателя, но
+`timeout 5s ros2 topic echo /vehicle/imu --once` завершается с кодом 124.
+Команды `gz topic -i/-e -t /vehicle/imu` подтверждают, что исходный сенсор
+работает. После восстановления имени и перезапуска того же launch сообщения
+приходят. Одновременно второй мост не запускается.
+
+Адаптер команды ограничивает скорость и угол, переводит Ackermann в Twist;
+устаревшая команда и NaN/inf дают ноль. Адаптер одометрии сохраняет stamp,
+pose, twist и обе covariance, меняет frames на `odom/base_link` и публикует
+единственный TF `odom -> base_link`. Статические связи публикует
+`robot_state_publisher` из ПР06.
+
+Частота камеры изменена с 20 до 10 Гц. Измеренные `ros2 topic hz` частоты:
+камера 7.062 Гц, лидар 7.538 Гц, IMU 74.857 Гц, одометрия 37.414 Гц.
+Симуляция с программным рендерингом идёт медленнее реального времени;
+частоты, frames и пояснения сохранены в `evidence/pr07/sensors.json`.
+Команды и вывод находятся в `headless.txt`, проверки одометрии - в
+`odom-adapter.md`, фактическая среда - в `workstation.txt`.
+
+### Запись и проверка evidence
+
+При работающем исправном launch в третьем терминале:
+
+```bash
+ros2 bag record --storage mcap --use-sim-time -o fixtures/pr07-sensors \
+  --topics /vehicle/camera/image_raw /vehicle/scan /vehicle/imu \
+  /vehicle/odom /tf /tf_static /clock
+```
+
+Остановить recorder через `Ctrl+C` после записи не менее 30 секунд
+симуляционного времени. Затем:
+
+```bash
+ros2 bag info fixtures/pr07-sensors | tee evidence/pr07/bag-info.txt
+python3 .course-kit/v1/tools/check_practice.py PR07 --submission .
+```

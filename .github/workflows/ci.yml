@@ -17,13 +17,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install description tools
+      - name: Install PR07 dependencies
         shell: bash
         run: |
           apt-get update
+          apt-get upgrade -y --with-new-pkgs
           apt-get install -y --no-install-recommends \
             ros-jazzy-xacro ros-jazzy-robot-state-publisher \
-            ros-jazzy-ament-cmake-pytest liburdfdom-tools python3-pytest
+            ros-jazzy-ament-cmake-pytest ros-jazzy-ackermann-msgs \
+            ros-jazzy-ros-gz ros-jazzy-rosbag2-storage-mcap \
+            liburdfdom-tools python3-pytest
 
       - name: Download course kit
         shell: bash
@@ -38,7 +41,7 @@ jobs:
         run: |
           source /opt/ros/jazzy/setup.bash
           colcon build --symlink-install --packages-select \
-            turtle_bringup patrol course_bringup course_description
+            turtle_bringup patrol course_bringup course_description course_simulation
 
       - name: Check URDF
         shell: bash
@@ -53,10 +56,10 @@ jobs:
           source /opt/ros/jazzy/setup.bash
           source install/setup.bash
           colcon test --packages-select \
-            turtle_bringup patrol course_bringup course_description \
+            turtle_bringup patrol course_bringup course_description course_simulation \
             --event-handlers console_direct+
           colcon test-result --verbose
 
-      - name: Check PR06 evidence
+      - name: Check PR07 evidence
         shell: bash
-        run: python3 .course-kit/v1/tools/check_practice.py PR06 --submission .
+        run: python3 .course-kit/v1/tools/check_practice.py PR07 --submission .
