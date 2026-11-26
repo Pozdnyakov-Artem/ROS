@@ -1,0 +1,21 @@
+{
+  "environment": "CarRacing-v2",
+  "algorithm": "PPO",
+  "policy": "CnnPolicy",
+  "continuous": true,
+  "seed": 17,
+  "requested_steps": 4096,
+  "total_steps": 4096,
+  "rollout_steps": 512,
+  "batch_size": 64,
+  "optimization_epochs": 4,
+  "duration_seconds": 111.92,
+  "versions": {
+    "gymnasium": "0.29.1",
+    "box2d": "2.3.10",
+    "numpy": "1.26.4",
+    "pygame": "2.6.1",
+    "stable-baselines3": "2.7.1",
+    "torch": "2.9.1+cpu"
+  }
+}

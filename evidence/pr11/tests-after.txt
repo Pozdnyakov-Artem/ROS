@@ -1,0 +1,8 @@
+test_greedy_tie_uses_first_action (test_train.QLearningTests.test_greedy_tie_uses_first_action) ... ok
+test_terminated_does_not_bootstrap (test_train.QLearningTests.test_terminated_does_not_bootstrap) ... ok
+test_time_limit_bootstraps (test_train.QLearningTests.test_time_limit_bootstraps) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+OK

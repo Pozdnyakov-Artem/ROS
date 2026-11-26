@@ -1,0 +1,89 @@
+{
+  "environment": "CarRacing-v2",
+  "algorithm": "PPO",
+  "continuous": true,
+  "deterministic": true,
+  "checkpoint_sha256": "47693dca5d3caa062fb12668ac07526e8c47568adf14faab9540c6d27da15502",
+  "episodes": [
+    {
+      "seed": 101,
+      "return": -70.29702970297066,
+      "steps": 1000,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 202,
+      "return": -67.39130434782666,
+      "steps": 1000,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 303,
+      "return": -68.19787985865777,
+      "steps": 1000,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 404,
+      "return": -67.50902527075868,
+      "steps": 1000,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 505,
+      "return": -71.87500000000026,
+      "steps": 1000,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 606,
+      "return": -63.503649635037256,
+      "steps": 1000,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 707,
+      "return": -40.23904382470202,
+      "steps": 1000,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 808,
+      "return": -64.66431095406433,
+      "steps": 1000,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 909,
+      "return": -71.60883280757125,
+      "steps": 1000,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 1010,
+      "return": -64.28571428571496,
+      "steps": 1000,
+      "terminated": false,
+      "truncated": true
+    }
+  ],
+  "mean_return": -64.95717906873038,
+  "std_return": 8.701662885113583,
+  "versions": {
+    "gymnasium": "0.29.1",
+    "box2d": "2.3.10",
+    "numpy": "1.26.4",
+    "pygame": "2.6.1",
+    "stable-baselines3": "2.7.1",
+    "torch": "2.9.1+cpu"
+  }
+}

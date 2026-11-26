@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR12",
+  "commit": "7b42af0ee8f54c0e37df20d6d65680270ea6ad28",
+  "course_kit": {
+    "version": "v1-w12",
+    "archive_sha256": "525e86f818ffed166e7f7b67cc87fdd3f3ea840d13aa90e76bde9fda0f3c9c5a"
+  },
+  "commands": [
+    "python -m pip install --disable-pip-version-check --no-input -r .course-kit/v1/rl_carracing/requirements.txt",
+    "bash -n labs/pr12/run.sh",
+    "bash labs/pr12/run.sh /results/run",
+    "python -B .course-kit/v1/rl_carracing/prepare_hub.py --run-dir /results/run --output /results/model",
+    "/Users/ashesha/.local/bin/hf auth whoami",
+    "HfApi().create_repo(\"Ashesha/ppo-CarRacing-v2\", repo_type=\"model\", private=False, exist_ok=False)",
+    "HfApi().upload_folder(repo_id=\"Ashesha/ppo-CarRacing-v2\", repo_type=\"model\", folder_path=\"/Users/ashesha/NSU/robot/pr12-runs/seed17.1S8tA8/model\", commit_message=\"Publish NSU robotics PR12 PPO CarRacing-v2 evaluation\")",
+    "HfApi().model_info(\"Ashesha/ppo-CarRacing-v2\", token=False)",
+    "hf_hub_download(\"Ashesha/ppo-CarRacing-v2\", \"ppo-CarRacing-v2.zip\", revision=\"2e6e3844d41f5783e75578fd0b09945f35938ee1\", token=False)",
+    "curl -fsSL -o /dev/null --max-time 20 https://huggingface.co/Ashesha/ppo-CarRacing-v2"
+  ],
+  "tests": [
+    {
+      "name": "CarRacing-v2 (Gymnasium 0.29.1): RGB 96 × 96 × 3, три непрерывных компонента действия",
+      "status": "passed"
+    },
+    {
+      "name": "PPO CnnPolicy: 4096 шагов на CPU, seed 17, веса сохранены",
+      "status": "passed"
+    },
+    {
+      "name": "Сохранённые веса оценены детерминированно на всех 10 отложенных seed",
+      "status": "passed"
+    },
+    {
+      "name": "Карточка пересчитала среднее и разброс и сверила SHA-256 checkpoint",
+      "status": "passed"
+    },
+    {
+      "name": "Все пять опубликованных файлов скачаны без авторизации и совпадают с локальным пакетом по SHA-256",
+      "status": "passed"
+    },
+    {
+      "name": "Таблица CarRacing-v2 проверена 2026-11-26T19:59:11+07:00, строка модели ожидает индексации",
+      "status": "passed"
+    }
+  ],
+  "claims": {
+    "public_tests_passed": true,
+    "multiple_seeds": true,
+    "model_published": true
+  },
+  "time": {
+    "contact_academic_hours": 2,
+    "self_study_hours": 2.5
+  },
+  "ai_used": true
+}

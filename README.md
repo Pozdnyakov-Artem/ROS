@@ -1,3 +1,39 @@
+## Практическая работа ПР12
+
+Скрипт запускает проверку среды CarRacing-v2, обучает PPO на CPU в течение 4096 шагов с seed 17 и оценивает сохранённые веса на десяти отдельных трассах. Для оценки политика выбирает действия детерминированно.
+
+Для установки нужны Linux x86-64, Python 3.12 и course kit `v1-w12`, распакованный в `.course-kit/`. Путь вывода должен указывать на новый каталог. Храните веса и каталог карточки вне рабочего дерева.
+
+```bash
+uv venv --python 3.12 .venv-pr12
+source .venv-pr12/bin/activate
+uv pip install -r .course-kit/v1/rl_carracing/requirements.txt
+pr12_run="$(mktemp -d)/run"
+bash labs/pr12/run.sh "$pr12_run"
+hub_dir="$(mktemp -d)/model"
+python -B .course-kit/v1/rl_carracing/prepare_hub.py \
+  --run-dir "$pr12_run" --output "$hub_dir"
+```
+
+Журнал обучения, результаты всех заездов, карточка и разбор находятся в [evidence/pr12](evidence/pr12). Для публикации загрузите подготовленный каталог целиком согласно [условию ПР12](https://ros.lms.ci.nsu.ru/practices/pr12).
+
+## Практическая работа ПР11
+
+Табличная Q-политика учится удерживать робота в дискретной полосе. Она обучается на seed 0–1999 и проверяется на десяти отдельных seed из комплекта курса. Тесты проверяют обновление Q при завершении задачи и при достижении лимита шагов.
+
+Нужен Python 3.10 или новее. Распакуйте course kit `v1-w12` в `.course-kit/`. В этой версии сохранена среда ПР11 и обновлён манифест сдачи.
+
+```bash
+mkdir -p evidence/pr11
+PYTHONPATH=.course-kit/v1/rl_intro python3 -B -m unittest discover -s labs/pr11/tests -v
+PYTHONPATH=.course-kit/v1/rl_intro python3 -B labs/pr11/train.py \
+  --output evidence/pr11/q-table.json
+python3 -B .course-kit/v1/rl_intro/evaluate.py \
+  --policy evidence/pr11/q-table.json --output evidence/pr11/evaluation.json
+```
+
+Итоги заездов и разбор двух трасс с одинаковым seed сохранены в [evidence/pr11](evidence/pr11).
+
 ## Практическая работа ПР10
 
 Выполнил: Колосов Егор. Docker `osrf/ros:jazzy-desktop-full` + `python3-jsonschema`, ROS 2 Jazzy, course kit `v1-w11`.

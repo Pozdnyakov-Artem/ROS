@@ -83,4 +83,59 @@ jobs:
 
       - name: Check PR10 evidence
         shell: bash
-        run: python3 .course-kit/v1/tools/check_practice.py PR10 --submission .
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          submission="$(git log -1 --format=%H -- evidence/pr10/report.json)"
+          snapshot="$(mktemp -d)"
+          git config --global --add safe.directory "$snapshot"
+          git worktree add --detach "$snapshot" "$submission"
+          trap 'git worktree remove "$snapshot"' EXIT
+          python3 .course-kit/v1/tools/check_practice.py PR10 --submission "$snapshot"
+
+  rl:
+    runs-on: ubuntu-latest
+    env:
+      COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w12-525e86f818ff.tar.gz
+      COURSE_KIT_SHA256: 525e86f818ffed166e7f7b67cc87fdd3f3ea840d13aa90e76bde9fda0f3c9c5a
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download RL course kit
+        shell: bash
+        run: |
+          curl -fsSLo "$RUNNER_TEMP/course-kit.tar.gz" "$COURSE_KIT_URL"
+          printf '%s  %s\n' "$COURSE_KIT_SHA256" "$RUNNER_TEMP/course-kit.tar.gz" | sha256sum -c -
+          mkdir -p .course-kit
+          tar -xzf "$RUNNER_TEMP/course-kit.tar.gz" -C .course-kit
+
+      - name: Test and evaluate PR11
+        shell: bash
+        run: |
+          export PYTHONPATH=.course-kit/v1/rl_intro
+          python3 -B -m unittest discover -s labs/pr11/tests -v
+          python3 -B labs/pr11/train.py --output "$RUNNER_TEMP/pr11-q-table.json"
+          python3 -B .course-kit/v1/rl_intro/evaluate.py \
+            --policy "$RUNNER_TEMP/pr11-q-table.json" --output "$RUNNER_TEMP/pr11-evaluation.json"
+
+      - name: Check PR12 run script
+        shell: bash
+        run: bash -n labs/pr12/run.sh
+
+      - name: Check RL evidence at submission commits
+        shell: bash
+        run: |
+          for number in 11 12; do
+            report="evidence/pr$number/report.json"
+            if [[ -f "$report" ]]; then
+              submission="$(git log -1 --format=%H -- "$report")"
+              snapshot="$(mktemp -d)"
+              git worktree add --detach "$snapshot" "$submission"
+              trap 'git worktree remove "$snapshot"' EXIT
+              python3 .course-kit/v1/tools/check_practice.py "PR$number" --submission "$snapshot"
+              git worktree remove "$snapshot"
+              trap - EXIT
+            fi
+          done

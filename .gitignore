@@ -1,4 +1,5 @@
 .course-kit/
+/.venv-pr12/
 robotics-course-kit-*.tar.gz
 robotics-course-kit-*.sha256.txt
 build/

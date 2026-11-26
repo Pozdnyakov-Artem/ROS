@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR11",
+  "commit": "f08515fb41c95bf10efe14834c5cf71cda320596",
+  "course_kit": {
+    "version": "v1-w12",
+    "archive_sha256": "525e86f818ffed166e7f7b67cc87fdd3f3ea840d13aa90e76bde9fda0f3c9c5a"
+  },
+  "commands": [
+    "PYTHONPATH=.course-kit/v1/rl_intro python3 -B -m unittest discover -s labs/pr11/tests -v > evidence/pr11/tests-after.txt 2>&1",
+    "PYTHONPATH=.course-kit/v1/rl_intro python3 -B labs/pr11/train.py --output evidence/pr11/q-table.json",
+    "python3 -B .course-kit/v1/rl_intro/evaluate.py --policy evidence/pr11/q-table.json --output evidence/pr11/evaluation.json"
+  ],
+  "tests": [
+    {
+      "name": "Завершение задачи без будущего возврата даёт Q=1.20",
+      "status": "passed"
+    },
+    {
+      "name": "Обрыв LaneEnv по лимиту сохраняет вклад следующего состояния и даёт Q=1.96",
+      "status": "passed"
+    },
+    {
+      "name": "При одинаковых Q жадный выбор сохраняет порядок действий среды",
+      "status": "passed"
+    },
+    {
+      "name": "На 10 проверочных seed Q-политика финишировала 10 раз, движение прямо — 6 раз",
+      "status": "passed"
+    }
+  ],
+  "claims": {
+    "public_tests_passed": true,
+    "multiple_seeds": true
+  },
+  "time": {
+    "contact_academic_hours": 2,
+    "self_study_hours": 2.5
+  },
+  "ai_used": true
+}
